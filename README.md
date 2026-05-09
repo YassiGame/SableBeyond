@@ -26,7 +26,7 @@ Sable Beyond expands the Sable mod with additional features, quality-of-life imp
 | Entity mass system, configurable with formulas, etc. |                  0.0.1 | ✅ | ✅ |
 
 ___
-## Entity Mass preview
+## Entity Mass
 <p align="center">
   <img width="1000" height="auto" src="https://cdn.modrinth.com/data/PrW3B4fH/images/bd2f39f085a5c102bdaf4c4480f54ffc0d3d5554.gif" />
 </p>
