@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "sable_beyond",
+  "version": "${version}",
+  "name": "Sable Beyond",
+  "description": "Sable Beyond expands the Sable mod with additional features, quality-of-life improvements, and compatibility support. It is designed to add ideas that are not part of the main mod while keeping the gameplay experience consistent with Sable.",
+  "authors": [
+    "YassiGame"
+  ],
+  "contact": {
+    "homepage": ""
+  },
+  "license": "MIT",
+  "icon": "assets/sable_beyond/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.yassigame.sable_beyond.fabric.SableBeyondFabric"
+    ],
+    "client": [
+      "me.yassigame.sable_beyond.fabric.client.SableBeyondFabricClient"
+    ]
+  },
+  "mixins": [
+    "sable_beyond.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

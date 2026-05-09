@@ -1,0 +1,90 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+def modmenuEnabled = providers.gradleProperty("modmenu_enabled").map { it.toBoolean() }.getOrElse(false)
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    sableFabricRuntime {
+        canBeResolved = true
+        canBeConsumed = false
+        transitive = false
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    compileOnly("dev.ryanhcode.sable:sable-common-${rootProject.minecraft_version}:${rootProject.sable_version}") { transitive = false }
+
+    if (modmenuEnabled) {
+        modRuntimeOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
+    }
+    sableFabricRuntime("dev.ryanhcode.sable:sable-fabric-${rootProject.minecraft_version}:${rootProject.sable_version}")
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand version: project.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}
+
+def sableRunModsDir = layout.projectDirectory.dir("run/mods")
+
+tasks.register("syncSableFabricRuntime") {
+    outputs.dir(sableRunModsDir)
+
+    doLast {
+        def modsDir = sableRunModsDir.asFile
+        modsDir.mkdirs()
+
+        fileTree(modsDir).matching {
+            include "sable-fabric-*.jar"
+        }.files.each { file ->
+            file.delete()
+        }
+
+        copy {
+            from configurations.sableFabricRuntime
+            into modsDir
+        }
+    }
+}
+
+tasks.matching { it.name in ["runClient", "runServer"] }.configureEach {
+    dependsOn(tasks.named("syncSableFabricRuntime"))
+}

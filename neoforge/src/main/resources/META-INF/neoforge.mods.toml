@@ -1,0 +1,48 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "sable_beyond"
+version = "${version}"
+displayName = "Sable Beyond"
+authors = "YassiGame"
+description = '''
+Sable Beyond expands the Sable mod with additional features, quality-of-life improvements, and compatibility support. It is designed to add ideas that are not part of the main mod while keeping the gameplay experience consistent with Sable.
+'''
+logoFile = "assets/sable_beyond/icon.png"
+
+[[dependencies.sable_beyond]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sable_beyond]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sable_beyond]]
+modId = "sable"
+type = "required"
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.sable_beyond]]
+modId = "create"
+type = "required"
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "sable_beyond.mixins.json"
+
+[[mixins]]
+config = "sable_beyond.neoforge.mixins.json"

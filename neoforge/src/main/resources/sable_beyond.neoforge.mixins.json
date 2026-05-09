@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "me.yassigame.sable_beyond.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
+  "client": [
+    "compatibility.create.mechanical_arm.ArmInteractionSubLevelPointAnimation",
+    "compatibility.create.mechanical_arm.MechanicalArmSublevelFailure"
+  ],
+  "mixins": [
+    "compatibility.create.fan_airflow.EncasedFanBlockEntityMixin",
+    "compatibility.create.mechanical_arm.MechanicalArmConfigurationRefresh",
+    "compatibility.create.mechanical_arm.MechanicalArmSublevelInteraction"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
