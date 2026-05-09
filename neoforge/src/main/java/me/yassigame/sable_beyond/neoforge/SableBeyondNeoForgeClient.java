@@ -5,8 +5,6 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 public final class SableBeyondNeoForgeClient {
-    private SableBeyondNeoForgeClient() {
-    }
 
     public static void registerConfigScreen(final ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class,

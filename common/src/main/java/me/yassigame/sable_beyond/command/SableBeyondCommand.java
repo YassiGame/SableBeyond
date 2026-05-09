@@ -6,8 +6,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 public final class SableBeyondCommand {
-    private SableBeyondCommand() {
-    }
 
     public static void register(final CommandDispatcher<CommandSourceStack> dispatcher, final CommandBuildContext buildContext) {
         final var root = Commands.literal("sable_beyond")

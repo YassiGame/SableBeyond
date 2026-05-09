@@ -23,9 +23,6 @@ public final class EntityMassConfigLoader {
             .resolve("mass")
             .resolve("item_entity_masses.json");
 
-    private EntityMassConfigLoader() {
-    }
-
     public static void load() {
         GlobalMassConfigIO.loadIntoRegistry(GLOBAL_CONFIG_PATH);
         EntityMassConfigIO.loadIntoRegistry(CONFIG_PATH);

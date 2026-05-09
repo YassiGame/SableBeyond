@@ -6,8 +6,6 @@ import me.yassigame.sable_beyond.event.EntityMassOnSublevelListener;
 import me.yassigame.sable_beyond.event.EntityOnSublevelGroundEventDispatcher;
 
 final class SableBeyondFabricSableHooks {
-    private SableBeyondFabricSableHooks() {
-    }
 
     static void register() {
         SableEventPlatform.INSTANCE.onPhysicsTick(EntityOnSublevelGroundEventDispatcher::onPhysicsTick);

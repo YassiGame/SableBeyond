@@ -16,9 +16,6 @@ public final class GlobalMassConfigIO {
             .disableHtmlEscaping()
             .create();
 
-    private GlobalMassConfigIO() {
-    }
-
     public static void loadIntoRegistry(final Path configPath) {
         MassRegistry.applyGlobalConfig(load(configPath));
     }

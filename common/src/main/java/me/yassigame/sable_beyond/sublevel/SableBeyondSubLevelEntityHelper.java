@@ -6,8 +6,6 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public final class SableBeyondSubLevelEntityHelper {
-    private SableBeyondSubLevelEntityHelper() {
-    }
 
     public static boolean isOnSublevelGround(final Entity entity) {
         return getGroundedTrackingSubLevel(entity) != null;

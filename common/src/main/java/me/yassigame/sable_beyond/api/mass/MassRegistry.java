@@ -47,9 +47,6 @@ public final class MassRegistry {
     private static volatile @Nullable FormulaManager itemEntityFormula = FormulaManager.compile("block_mass * count");
     private static volatile @Nullable Double itemEntityFallbackMass;
 
-    private MassRegistry() {
-    }
-
     public record MassResolution(double mass, MassSource source) {
     }
 

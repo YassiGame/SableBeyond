@@ -6,8 +6,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 
 public final class SableMassCompat {
-    private SableMassCompat() {
-    }
 
     // gets the mass sable put on the block of that minecraft item entity
     public static double getBlockMass(final ItemEntity itemEntity, final BlockItem blockItem) {

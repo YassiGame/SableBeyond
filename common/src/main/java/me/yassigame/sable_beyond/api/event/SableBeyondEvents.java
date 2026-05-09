@@ -7,9 +7,6 @@ public final class SableBeyondEvents {
     private static final List<EntityOnSublevelGroundListener> ENTITY_ON_SUBLEVEL_GROUND_LISTENERS = new CopyOnWriteArrayList<>();
     //private static final List<EntityMassOnSublevelListener> ENTITY_MASS_ON_SUBLEVEL_LISTENERS = new CopyOnWriteArrayList<>();
 
-    private SableBeyondEvents() {
-    }
-
     public static void registerEntityOnSublevelGround(final EntityOnSublevelGroundListener listener) {
         ENTITY_ON_SUBLEVEL_GROUND_LISTENERS.add(listener);
     }

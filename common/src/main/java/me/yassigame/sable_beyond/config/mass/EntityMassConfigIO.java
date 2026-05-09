@@ -16,9 +16,6 @@ public final class EntityMassConfigIO {
             .disableHtmlEscaping()
             .create();
 
-    private EntityMassConfigIO() {
-    }
-
     public static void loadIntoRegistry(final Path configPath) {
         MassRegistry.applyConfig(load(configPath));
     }
