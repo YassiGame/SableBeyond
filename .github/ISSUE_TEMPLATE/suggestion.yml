@@ -1,0 +1,16 @@
+name: Suggestion
+description: Suggest a new feature
+title: "Suggestion: "
+type: Feature
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched [GitHub](https://github.com/YassiGame/SableBeyond/issues?q=is%3Aissue%20state%3Aopen%20label%3ASuggestion) for my suggestion
+          required: true
+
+  - type: textarea
+    attributes:
+      label: What is your suggestion?
+      placeholder: Be a good dev
