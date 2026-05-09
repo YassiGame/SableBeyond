@@ -24,3 +24,25 @@ Sable Beyond expands the Sable mod with additional features, quality-of-life imp
 | Mechanical arm compatibility with Sable sublevels |                  0.0.1 | ✅ | ❌ |
 | Create fans can push / pull sublevels |                  0.0.1 | ✅ | ❌ |
 | Entity mass system, configurable with formulas, etc. |                  0.0.1 | ✅ | ✅ |
+
+___
+## Entity Mass preview
+<p align="center">
+  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/PrW3B4fH/images/bd2f39f085a5c102bdaf4c4480f54ffc0d3d5554.gif" />
+</p>
+
+- An advanced config for the entity mass and formula system with functions and operators
+<div align="center">
+  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/cached_images/5f018b58b12318a779c79337323687c12689b765.png" />
+  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/cached_images/79835a2015f7b3d506375045164b255b575e7ba4.png" />
+</div>
+
+## Mechanical arm compatibility with Sable sublevels
+<p align="center">
+  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/PrW3B4fH/images/546479b3d449bce5eb5d284ed1d29704b4fd66a5.gif" />
+</p>
+
+## Encased Fan can push/pull sublevels
+<p align="center">
+  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/PrW3B4fH/images/f02b6a47acc0473ace9f36c7d7fc12448a70d369.gif" />
+</p>
