@@ -62,29 +62,3 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
-
-def sableRunModsDir = layout.projectDirectory.dir("run/mods")
-
-tasks.register("syncSableFabricRuntime") {
-    outputs.dir(sableRunModsDir)
-
-    doLast {
-        def modsDir = sableRunModsDir.asFile
-        modsDir.mkdirs()
-
-        fileTree(modsDir).matching {
-            include "sable-fabric-*.jar"
-        }.files.each { file ->
-            file.delete()
-        }
-
-        copy {
-            from configurations.sableFabricRuntime
-            into modsDir
-        }
-    }
-}
-
-tasks.matching { it.name in ["runClient", "runServer"] }.configureEach {
-    dependsOn(tasks.named("syncSableFabricRuntime"))
-}
