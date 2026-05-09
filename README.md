@@ -22,5 +22,5 @@ Sable Beyond expands the Sable mod with additional features, quality-of-life imp
 | Feature | Implemented in version | NeoForge | Fabric |
 |---|-----------------------:|:---:|:---:|
 | Mechanical arm compatibility with Sable sublevels |                  0.0.1 | ✅ | ❌ |
-| Create fans can push sublevels |                  0.0.1 | ✅ | ❌ |
+| Create fans can push / pull sublevels |                  0.0.1 | ✅ | ❌ |
 | Entity mass system, configurable with formulas, etc. |                  0.0.1 | ✅ | ✅ |
