@@ -1,0 +1,1 @@
+me.yassigame.sable_beyond.neoforge.integration.kubejs.KubeJSIntegration

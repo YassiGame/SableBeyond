@@ -11,7 +11,7 @@
     "homepage": ""
   },
   "license": "MIT",
-  "icon": "assets/sable_beyond/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

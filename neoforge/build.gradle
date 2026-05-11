@@ -63,6 +63,8 @@ dependencies {
         runtimeOnly "curse.maven:catalogue-459701:${rootProject.catalogue_version}"
     }
 
+    compileOnly("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

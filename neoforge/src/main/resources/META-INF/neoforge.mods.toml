@@ -11,7 +11,7 @@ authors = "YassiGame"
 description = '''
 Sable Beyond expands the Sable mod with additional features, quality-of-life improvements, and compatibility support. It is designed to add ideas that are not part of the main mod while keeping the gameplay experience consistent with Sable.
 '''
-logoFile = "assets/sable_beyond/icon.png"
+logoFile = "icon.png"
 
 [[dependencies.sable_beyond]]
 modId = "neoforge"

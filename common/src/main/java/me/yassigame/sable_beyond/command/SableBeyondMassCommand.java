@@ -38,13 +38,6 @@ public final class SableBeyondMassCommand {
     private static final SimpleCommandExceptionType ERROR_NO_VIEWED_ENTITY = new SimpleCommandExceptionType(Component.literal("No entity in sight."));
     private static final SimpleCommandExceptionType ERROR_UNSUPPORTED_SELECTOR = new SimpleCommandExceptionType(Component.literal("Use @v, @s, @p, a UUID, or a single target selector. @a and @e are disabled here."));
 
-    public static void register(final CommandDispatcher<CommandSourceStack> dispatcher) {
-        final var root = Commands.literal("sable_beyond")
-                .requires(source -> source.hasPermission(2));
-        addSubcommands(root);
-        dispatcher.register(root);
-    }
-
     public static void addSubcommands(final LiteralArgumentBuilder<CommandSourceStack> root) {
         root.then(Commands.literal("mass")
                 .then(Commands.literal("entity")
@@ -129,7 +122,7 @@ public final class SableBeyondMassCommand {
     }
 
     private static int setMass(final CommandSourceStack source, final Entity entity, final double mass) {
-        SableBeyondEntityApi.getMassNbt(entity).putDouble(MassRegistry.getNbtKey(), mass);
+        MassRegistry.setMassNbt(entity, mass);
 
         final MassRegistry.MassResolution resolution = MassRegistry.resolveMassInfo(entity);
         final ResourceLocation entityId = EntityType.getKey(entity.getType());
@@ -143,7 +136,7 @@ public final class SableBeyondMassCommand {
     }
 
     private static int resetMass(final CommandSourceStack source, final Entity entity) {
-        SableBeyondEntityApi.getMassNbt(entity).remove(MassRegistry.getNbtKey());
+        MassRegistry.clearMassNbt(entity);
 
         final MassRegistry.MassResolution resolution = MassRegistry.resolveMassInfo(entity);
         final ResourceLocation entityId = EntityType.getKey(entity.getType());

@@ -30,7 +30,7 @@ public final class EntityMassConfigData {
 
     public static final class EntityFormulaMassConfigData {
         public boolean enabled = true;
-        public String formula = "min(auto_mass, 15)";
+        public String formula = MassRegistry.DEFAULT_ENTITY_FORMULA;
         public Double fallback_mass = null;
 
         public static EntityFormulaMassConfigData defaults() {

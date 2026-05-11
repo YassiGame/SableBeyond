@@ -28,6 +28,8 @@ public final class MassRegistry {
     public static final double DEFAULT_BASE_MASS = 0.5;
     public static final double DEFAULT_VOLUME_MULTIPLIER = 4.0;
     public static final String DEFAULT_NBT_KEY = "mass";
+    public static final String DEFAULT_ENTITY_FORMULA = "min(auto_mass, 15)";
+    public static final String DEFAULT_ITEM_ENTITY_FORMULA = "block_mass * count";
 
     private static final Map<ResourceLocation, Double> ENTITY_OVERRIDES = new ConcurrentHashMap<>();
     private static final Map<ResourceLocation, Double> ITEM_OVERRIDES = new ConcurrentHashMap<>();
@@ -41,10 +43,12 @@ public final class MassRegistry {
     private static volatile boolean entityFormulaEnabled;
     private static volatile boolean entityFormulaInvalid;
     private static volatile @Nullable FormulaManager entityFormula;
+    private static volatile String entityFormulaExpression = DEFAULT_ENTITY_FORMULA;
     private static volatile @Nullable Double entityFormulaFallbackMass;
     private static volatile boolean itemEntityFormulaEnabled = true;
     private static volatile boolean itemEntityFormulaInvalid;
-    private static volatile @Nullable FormulaManager itemEntityFormula = FormulaManager.compile("block_mass * count");
+    private static volatile String itemEntityFormulaExpression = DEFAULT_ITEM_ENTITY_FORMULA;
+    private static volatile @Nullable FormulaManager itemEntityFormula = FormulaManager.compile(DEFAULT_ITEM_ENTITY_FORMULA);
     private static volatile @Nullable Double itemEntityFallbackMass;
 
     public record MassResolution(double mass, MassSource source) {
@@ -68,11 +72,13 @@ public final class MassRegistry {
             volumeMultiplier = DEFAULT_VOLUME_MULTIPLIER;
             entityFormulaEnabled = true;
             entityFormulaInvalid = false;
-            entityFormula = FormulaManager.compile("auto_mass");
+            entityFormula = FormulaManager.compile(DEFAULT_ENTITY_FORMULA);
+            entityFormulaExpression = DEFAULT_ENTITY_FORMULA;
             entityFormulaFallbackMass = null;
             itemEntityFormulaEnabled = true;
             itemEntityFormulaInvalid = false;
-            itemEntityFormula = FormulaManager.compile("block_mass * count");
+            itemEntityFormulaExpression = DEFAULT_ITEM_ENTITY_FORMULA;
+            itemEntityFormula = FormulaManager.compile(DEFAULT_ITEM_ENTITY_FORMULA);
             itemEntityFallbackMass = null;
             return;
         }
@@ -156,8 +162,31 @@ public final class MassRegistry {
         return new MassResolution(sanitizeMass(mass, baseMass), entity instanceof ItemEntity ? MassSource.ITEM_AUTO : MassSource.AUTO);
     }
 
+    public static double evaluateEntityFormula(final Entity entity, final String formula) {
+        final double result = FormulaManager.compile(formula).evaluate(buildFormulaVariables(entity));
+        return requireValidMass("Entity formula result", result);
+    }
+
+    public static double setMassNbt(final Entity entity, final double mass) {
+        final double validMass = requireValidMass("Mass NBT", mass);
+        SableBeyondEntityApi.getMassNbt(entity).putDouble(DEFAULT_NBT_KEY, validMass);
+        return validMass;
+    }
+
+    public static void clearMassNbt(final Entity entity) {
+        SableBeyondEntityApi.getMassNbt(entity).remove(DEFAULT_NBT_KEY);
+    }
+
     public static String getNbtKey() {
         return DEFAULT_NBT_KEY;
+    }
+
+    public static String getLivingEntityFormula() {
+        return entityFormulaExpression;
+    }
+
+    public static String getItemEntityFormula() {
+        return itemEntityFormulaExpression;
     }
 
     public static boolean isExperimentalPlayerSublevelInteractionEnabled() {
@@ -169,10 +198,6 @@ public final class MassRegistry {
     }
 
     public static boolean isEnabled() {
-        return globalEnabled;
-    }
-
-    public static boolean isGlobalMassEnabled() {
         return globalEnabled;
     }
 
@@ -286,6 +311,18 @@ public final class MassRegistry {
         return variables;
     }
 
+    private static Map<String, Double> buildFormulaVariables(final Entity entity) {
+        if (entity instanceof final LivingEntity livingEntity) {
+            return buildLivingEntityVariables(livingEntity);
+        }
+
+        if (entity instanceof final ItemEntity itemEntity) {
+            return buildItemEntityVariables(itemEntity);
+        }
+
+        return buildCommonEntityVariables(entity);
+    }
+
     private static Map<String, Double> buildCommonEntityVariables(final Entity entity) {
         final Map<String, Double> variables = new HashMap<>();
         final AABB box = entity.getBoundingBox();
@@ -324,12 +361,13 @@ public final class MassRegistry {
         entityFormulaFallbackMass = effective.fallback_mass == null ? null : sanitizeMass(effective.fallback_mass, baseMass);
         entityFormulaInvalid = false;
         entityFormula = null;
+        entityFormulaExpression = effective.formula == null ? defaults.formula : effective.formula;
 
         if (!entityFormulaEnabled) {
             return;
         }
 
-        final String formula = effective.formula == null ? defaults.formula : effective.formula;
+        final String formula = entityFormulaExpression;
         if (formula.isBlank()) {
             entityFormulaInvalid = true;
             SableBeyond.LOGGER.warn("Entity mass formula is blank, falling back to the optional entity formula fallback mass.");
@@ -354,6 +392,7 @@ public final class MassRegistry {
         itemEntityFallbackMass = effective.fallback_mass == null ? null : sanitizeMass(effective.fallback_mass, baseMass);
         itemEntityFormulaInvalid = false;
         itemEntityFormula = null;
+        itemEntityFormulaExpression = effective.formula == null ? defaults.formula : effective.formula;
 
         if (effective.items != null) {
             for (final Map.Entry<String, Double> entry : effective.items.entrySet()) {
@@ -396,6 +435,14 @@ public final class MassRegistry {
     private static double sanitizeMass(final @Nullable Double mass, final double fallback) {
         if (mass == null || !Double.isFinite(mass) || mass < 0.0) {
             return fallback;
+        }
+
+        return mass;
+    }
+
+    private static double requireValidMass(final String name, final double mass) {
+        if (!Double.isFinite(mass) || mass < 0.0) {
+            throw new IllegalArgumentException(name + " must be finite and non-negative.");
         }
 
         return mass;
