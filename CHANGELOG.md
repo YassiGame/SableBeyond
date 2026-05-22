@@ -28,7 +28,7 @@ Example:
 
 - (Common) Added Cloth Config for a better configuration screen
 - (Common) Added the Dynamic Mass API
-- (NeoForge) Added Dynamic Mass implementation for Create fluid pipes, fluid tanks, spouts, and basins
+- (NeoForge) Added Dynamic Mass implementation for Create fluid tanks, spouts, drains and basins
 - (NeoForge) Added KubeJS support (documentation will be available soon, and more features will be added later)
 - (Common) Added a command to display system information for GitHub issue reports
 - (NeoForge) Create Basins inside upside-down sub-levels can now drop their items (disabled by default)
