@@ -49,9 +49,9 @@ ___
 - An advanced config for the entity mass and formula system with functions and operators
 
 <div align="center">
-  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/cached_images/5f018b58b12318a779c79337323687c12689b765.png" />
-  
-  <img width="1000" height="auto" src="https://cdn.modrinth.com/data/cached_images/79835a2015f7b3d506375045164b255b575e7ba4.png" />
+  <img width="1000" height="auto" src="https://github.com/user-attachments/assets/43d19e6f-0674-4a26-a8fe-b754ab8a7f9c" />
+  <img width="1000" height="auto" src="https://github.com/user-attachments/assets/fe3d95e2-ebaa-4192-be8c-e2856f27db7b" />
+
   <p><em>Create advanced formulas with operators and functions to fine-tune mass calculations.</em></p>
 </div>
 
