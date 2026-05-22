@@ -20,7 +20,19 @@ Example:
 - (Common) Added mass for entities, configurable with formulas, etc.
 - That’s all, I think. Apart from a few things like experimental player interaction / mass, nothing major, and in any case they’re still very much WIP.
 
-## [0.0.2] - Some improvements
+## [0.0.2] - Dynamic Mass and Config Revamp and ~~cake~~ KubeJS !
 
-- (Neoforge) Added KubeJS support (a doc will be live soon / also i will add more things)
-- (Common) Added a command to have system info (for issue purposes)
+<h1>
+⚠️ This update breaks the current configuration. The config path has changed, so please back up your old config and delete it to allow the new one to be created.
+</h1>
+
+- (Common) Added Cloth Config for a better configuration screen
+- (Common) Added the Dynamic Mass API
+- (NeoForge) Added Dynamic Mass implementation for Create fluid pipes, fluid tanks, spouts, and basins
+- (NeoForge) Added KubeJS support (documentation will be available soon, and more features will be added later)
+- (Common) Added a command to display system information for GitHub issue reports
+- (NeoForge) Create Basins inside upside-down sub-levels can now drop their items (disabled by default)
+- (Common) Added French translation
+- (Common) Added a new config entry for living entity mass. It is now possible to apply mass only to players
+- (Common) Added a Sable Beyond button to the title screen and pause screen for easy access to the config (can be disabled)
+- (Common) Dynamic Mass and Entity Mass are now disabled by default (change this in the config)
