@@ -20,7 +20,7 @@
 <p>
 Sable Beyond expands the Sable mod with additional features, quality-of-life improvements, and compatibility support. It is designed to add ideas that are not part of the main mod while keeping the gameplay experience consistent with Sable.
 
-**Each feature is highly configurable.** For example, if you do not want entity mass, no problem — you can disable it in the config. You just need to locate the `config/sable_beyond` folder, where all the config files are stored, or use the in-game config screen.
+**Each feature is highly configurable.** For example, if you do not want entity mass, no problem you can disable it in the config. You just need to locate the `config/sable_beyond` folder, where all the config files are stored, or use the in-game config screen.
 
 ⚠️ This mod is still in alpha, so please make a backup beforehand. Also, if you encounter a bug, please report it on the GitHub Issues page.
 </p>
