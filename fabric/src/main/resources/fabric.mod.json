@@ -8,7 +8,9 @@
     "YassiGame"
   ],
   "contact": {
-    "homepage": ""
+    "homepage": "https://github.com/YassiGame/SableBeyond",
+    "sources": "https://github.com/YassiGame/SableBeyond",
+    "issues": "https://github.com/YassiGame/SableBeyond/issues"
   },
   "license": "MIT",
   "icon": "icon.png",
@@ -18,7 +20,10 @@
       "me.yassigame.sable_beyond.fabric.SableBeyondFabric"
     ],
     "client": [
-      "me.yassigame.sable_beyond.fabric.client.SableBeyondFabricClient"
+      "me.yassigame.sable_beyond.fabric.SableBeyondFabricClient"
+    ],
+    "modmenu": [
+      "me.yassigame.sable_beyond.fabric.client.SableBeyondModMenuIntegration"
     ]
   },
   "mixins": [
@@ -28,7 +33,8 @@
     "fabricloader": ">=0.19.2",
     "minecraft": "~1.21.1",
     "java": ">=21",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "cloth-config": ">=15.0.140"
   },
   "suggests": {
     "another-mod": "*"

@@ -4,7 +4,7 @@ import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem;
 import me.yassigame.sable_beyond.api.event.EntityOnSublevelGroundEvent;
 import me.yassigame.sable_beyond.api.event.SableBeyondEvents;
-import me.yassigame.sable_beyond.api.mass.MassRegistry;
+import me.yassigame.sable_beyond.api.mass.EntityMass;
 import me.yassigame.sable_beyond.sublevel.SableBeyondSubLevelEntityHelper;
 import net.minecraft.world.entity.Entity;
 
@@ -21,7 +21,7 @@ public final class EntityOnSublevelGroundEventDispatcher {
             SableBeyondEvents.fireEntityOnSublevelGround(new EntityOnSublevelGroundEvent(entity, subLevel, timeStep));
 
             // event for mass applied on sublevel by entity
-            if (MassRegistry.isMassAppliedEntity(entity)) {
+            if (EntityMass.isMassAppliedEntity(entity)) {
                 SableBeyondEvents.fireEntityOnSublevelGround(new EntityOnSublevelGroundEvent(entity, subLevel, timeStep));
             }
         }

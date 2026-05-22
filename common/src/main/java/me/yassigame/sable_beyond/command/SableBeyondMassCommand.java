@@ -1,6 +1,5 @@
 package me.yassigame.sable_beyond.command;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -9,21 +8,28 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import dev.ryanhcode.sable.physics.config.block_properties.PhysicsBlockPropertyHelper;
 import me.yassigame.sable_beyond.api.entity.SableBeyondEntityApi;
-import me.yassigame.sable_beyond.api.mass.MassRegistry;
+import me.yassigame.sable_beyond.api.mass.DynamicMass;
+import me.yassigame.sable_beyond.api.mass.EntityMass;
 import me.yassigame.sable_beyond.api.mass.MassSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.arguments.selector.EntitySelectorParser;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -37,9 +43,28 @@ public final class SableBeyondMassCommand {
     private static final String VIEWED_TARGET = "@v";
     private static final SimpleCommandExceptionType ERROR_NO_VIEWED_ENTITY = new SimpleCommandExceptionType(Component.literal("No entity in sight."));
     private static final SimpleCommandExceptionType ERROR_UNSUPPORTED_SELECTOR = new SimpleCommandExceptionType(Component.literal("Use @v, @s, @p, a UUID, or a single target selector. @a and @e are disabled here."));
+    private static final SimpleCommandExceptionType ERROR_AIR_BLOCK = new SimpleCommandExceptionType(Component.literal("Target block is air."));
 
     public static void addSubcommands(final LiteralArgumentBuilder<CommandSourceStack> root) {
         root.then(Commands.literal("mass")
+                .then(Commands.literal("block")
+                        .then(Commands.literal("info")
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .executes(context -> sendBlockMassInfo(
+                                                context.getSource(),
+                                                BlockPosArgument.getLoadedBlockPos(context, "pos")))))
+                        .then(Commands.literal("set")
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .then(Commands.argument("mass", DoubleArgumentType.doubleArg(0.0))
+                                                .executes(context -> setBlockMass(
+                                                        context.getSource(),
+                                                        BlockPosArgument.getLoadedBlockPos(context, "pos"),
+                                                        DoubleArgumentType.getDouble(context, "mass"))))))
+                        .then(Commands.literal("reset")
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .executes(context -> resetBlockMass(
+                                                context.getSource(),
+                                                BlockPosArgument.getLoadedBlockPos(context, "pos"))))))
                 .then(Commands.literal("entity")
                         .then(Commands.literal("info")
                                 .then(Commands.literal(VIEWED_TARGET)
@@ -90,13 +115,104 @@ public final class SableBeyondMassCommand {
         };
     }
 
+    private static int sendBlockMassInfo(final CommandSourceStack source, final BlockPos pos) throws CommandSyntaxException {
+        final ServerLevel level = source.getLevel();
+        final BlockState state = requireNonAirBlock(level, pos);
+        final ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        final double resolvedMass = PhysicsBlockPropertyHelper.getMass(level, pos, state);
+        final var dynamicMass = DynamicMass.getBlockMass(level, pos);
+
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "Block %s at %s -> mass %.3f (%s)",
+                blockId,
+                formatPos(pos),
+                resolvedMass,
+                dynamicMass.isPresent() ? "dynamic_override" : "sable_default")), false);
+        return 1;
+    }
+
+    private static int setBlockMass(final CommandSourceStack source, final BlockPos pos, final double mass) throws CommandSyntaxException {
+        final ServerLevel level = source.getLevel();
+        final BlockState state = requireNonAirBlock(level, pos);
+        final ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        final double previousMass = PhysicsBlockPropertyHelper.getMass(level, pos, state);
+        final DynamicMass.BlockMassChange change;
+        try {
+            change = DynamicMass.setBlockMassDetailed(level, pos, mass);
+        } catch (IllegalArgumentException exception) {
+            source.sendFailure(Component.literal(exception.getMessage()));
+            return 0;
+        }
+
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "Set dynamic mass %.3f on block %s at %s. Previous resolved mass: %.3f, sublevel sync: %s",
+                change.currentMass(),
+                blockId,
+                formatPos(pos),
+                previousMass,
+                formatBlockMassSync(change))), true);
+        return 1;
+    }
+
+    private static int resetBlockMass(final CommandSourceStack source, final BlockPos pos) throws CommandSyntaxException {
+        final ServerLevel level = source.getLevel();
+        final BlockState state = requireNonAirBlock(level, pos);
+        final ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+        final DynamicMass.BlockMassChange change;
+        try {
+            change = DynamicMass.clearBlockMassDetailed(level, pos);
+        } catch (IllegalArgumentException exception) {
+            source.sendFailure(Component.literal(exception.getMessage()));
+            return 0;
+        }
+        final double resolvedMass = PhysicsBlockPropertyHelper.getMass(level, pos, state);
+
+        source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "%s dynamic mass on block %s at %s. Current resolved mass: %.3f, sublevel sync: %s",
+                change.changed() ? "Reset" : "No",
+                blockId,
+                formatPos(pos),
+                resolvedMass,
+                formatBlockMassSync(change))), true);
+        return 1;
+    }
+
+    private static String formatBlockMassSync(final DynamicMass.BlockMassChange change) {
+        if (!change.changed()) {
+            return "no override";
+        }
+
+        if (!change.syncedSubLevel()) {
+            if (Double.compare(change.delta(), 0.0) == 0) {
+                return "no mass delta";
+            }
+
+            return String.format(Locale.ROOT, "not inside a loaded sublevel (stored delta %.3f)", change.delta());
+        }
+
+        return String.format(Locale.ROOT, "synced (delta %.3f, sublevel mass %.3f)", change.delta(), change.subLevelMass());
+    }
+
+    private static BlockState requireNonAirBlock(final ServerLevel level, final BlockPos pos) throws CommandSyntaxException {
+        final BlockState state = level.getBlockState(pos);
+        if (state.isAir()) {
+            throw ERROR_AIR_BLOCK.create();
+        }
+
+        return state;
+    }
+
+    private static String formatPos(final BlockPos pos) {
+        return pos.getX() + " " + pos.getY() + " " + pos.getZ();
+    }
+
     private static int sendMassInfo(final CommandSourceStack source, final Entity entity) {
-        final MassRegistry.MassResolution resolution = MassRegistry.resolveMassInfo(entity);
+        final EntityMass.MassResolution resolution = EntityMass.resolveMassInfo(entity);
         final String entityName = entity.getName().getString();
         final ResourceLocation entityId = EntityType.getKey(entity.getType());
 
         String statut;
-        if (!MassRegistry.isMassAppliedEntity(entity)) {
+        if (!EntityMass.isMassAppliedEntity(entity)) {
             statut = "[mass is disabled for this entity]";
         } else {
             statut = "";
@@ -104,27 +220,27 @@ public final class SableBeyondMassCommand {
 
         source.sendSuccess(() -> Component.literal(
                 String.format(Locale.ROOT,
-                    "Entity %s (%s) -> mass %.3f (%s) %s",
-                    entityName,
-                    entityId,
-                    resolution.mass(),
-                    formatSource(resolution.source()),
-                    statut
+                        "Entity %s (%s) -> mass %.3f (%s) %s",
+                        entityName,
+                        entityId,
+                        resolution.mass(),
+                        formatSource(resolution.source()),
+                        statut
                 )
         ), false);
 
         if (resolution.source() == MassSource.NBT_OVERRIDE) {
             source.sendSuccess(() -> Component.literal(
-                    "⇢ NBT override path: " + SableBeyondEntityApi.MASS_NBT_TAG + "." + MassRegistry.getNbtKey()), false);
+                    "⇢ NBT override path: " + SableBeyondEntityApi.MASS_NBT_TAG + "." + EntityMass.getNbtKey()), false);
         }
 
         return 1;
     }
 
     private static int setMass(final CommandSourceStack source, final Entity entity, final double mass) {
-        MassRegistry.setMassNbt(entity, mass);
+        EntityMass.setMassNbt(entity, mass);
 
-        final MassRegistry.MassResolution resolution = MassRegistry.resolveMassInfo(entity);
+        final EntityMass.MassResolution resolution = EntityMass.resolveMassInfo(entity);
         final ResourceLocation entityId = EntityType.getKey(entity.getType());
         source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                 "Set custom mass %.3f on %s. Current resolved mass: %.3f (%s)",
@@ -136,9 +252,9 @@ public final class SableBeyondMassCommand {
     }
 
     private static int resetMass(final CommandSourceStack source, final Entity entity) {
-        MassRegistry.clearMassNbt(entity);
+        EntityMass.clearMassNbt(entity);
 
-        final MassRegistry.MassResolution resolution = MassRegistry.resolveMassInfo(entity);
+        final EntityMass.MassResolution resolution = EntityMass.resolveMassInfo(entity);
         final ResourceLocation entityId = EntityType.getKey(entity.getType());
         source.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
                 "Reset custom mass on %s. Current resolved mass: %.3f (%s)",

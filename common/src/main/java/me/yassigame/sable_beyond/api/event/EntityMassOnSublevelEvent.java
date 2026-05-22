@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 
 // TODO adding this to the public api so addons can use it
 
+/**
 public final class EntityMassOnSublevelEvent {
     private final Entity entity;
     private final ServerSubLevel subLevel;
@@ -32,3 +33,4 @@ public final class EntityMassOnSublevelEvent {
         return this.timeStep;
     }
 }
+*/

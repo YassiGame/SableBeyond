@@ -9,7 +9,7 @@ import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import dev.ryanhcode.sable.physics.config.dimension_physics.DimensionPhysicsData;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import me.yassigame.sable_beyond.api.event.EntityOnSublevelGroundEvent;
-import me.yassigame.sable_beyond.api.mass.MassRegistry;
+import me.yassigame.sable_beyond.api.mass.EntityMass;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -27,17 +27,17 @@ public final class WipEntityMassOnSublevelListener {
     public static void onEntityMassOnSublevel(final EntityOnSublevelGroundEvent event) {
         final ServerSubLevel subLevel = event.getSubLevel();
         final Entity entity = event.getEntity();
-        if (!MassRegistry.isMassAppliedEntity(entity)) {
+        if (!EntityMass.isMassAppliedEntity(entity)) {
             return;
         }
 
-        final double resolvedMass = MassRegistry.resolveMass(entity);
+        final double resolvedMass = EntityMass.resolveMass(entity);
         if (resolvedMass <= 0.0) {
             return;
         }
 
         // If player mass is in experimental mode disable the normal one for players
-        if (entity instanceof Player && MassRegistry.isExperimentalPlayerMassEnabled()) {
+        if (entity instanceof Player && EntityMass.isExperimentalPlayerMassEnabled()) {
             return;
         }
 

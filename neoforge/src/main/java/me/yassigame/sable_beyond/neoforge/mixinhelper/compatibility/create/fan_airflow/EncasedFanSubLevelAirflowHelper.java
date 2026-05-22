@@ -11,7 +11,7 @@ import dev.ryanhcode.sable.mixinterface.clip_overwrite.ClipContextExtension;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem;
-import me.yassigame.sable_beyond.neoforge.SableBeyondNeoForgeConfig;
+import me.yassigame.sable_beyond.neoforge.config.SableBeyondNeoForgeConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ClipContext;
@@ -192,7 +192,7 @@ public final class EncasedFanSubLevelAirflowHelper {
                 : mainHit.getLocation().distanceToSqr(globalStart);
         FlowHit closestFlowHit = null;
 
-        // why this piece of shit of intelij idea tell me there is an error here...
+        // why this piece of shit of intelij idea tell me there is an error here... Edit: ahhh a warning for removal
         for (final SubLevel subLevel : Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(globalStart, globalEnd))) {
             if (!(subLevel instanceof final ServerSubLevel hitServerSubLevel) || subLevel == parentSubLevel) {
                 continue;

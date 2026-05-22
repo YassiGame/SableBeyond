@@ -86,25 +86,50 @@ public final class FormulaManager {
             }
 
             return switch (this.name) {
-                case "abs" -> requireArgCount(1, values, this.name, Math.abs(values.getFirst()));
-                case "sqrt" -> requireArgCount(1, values, this.name, Math.sqrt(values.getFirst()));
-                case "floor" -> requireArgCount(1, values, this.name, Math.floor(values.getFirst()));
-                case "ceil" -> requireArgCount(1, values, this.name, Math.ceil(values.getFirst()));
-                case "round" -> requireArgCount(1, values, this.name, Math.rint(values.getFirst()));
-                case "min" -> requireArgCount(2, values, this.name, Math.min(values.get(0), values.get(1)));
-                case "max" -> requireArgCount(2, values, this.name, Math.max(values.get(0), values.get(1)));
-                case "pow" -> requireArgCount(2, values, this.name, Math.pow(values.get(0), values.get(1)));
-                case "clamp" -> requireArgCount(3, values, this.name, Math.max(values.get(1), Math.min(values.get(0), values.get(2))));
+                case "abs" -> {
+                    requireArgCount(1, values, this.name);
+                    yield Math.abs(values.getFirst());
+                }
+                case "sqrt" -> {
+                    requireArgCount(1, values, this.name);
+                    yield Math.sqrt(values.getFirst());
+                }
+                case "floor" -> {
+                    requireArgCount(1, values, this.name);
+                    yield Math.floor(values.getFirst());
+                }
+                case "ceil" -> {
+                    requireArgCount(1, values, this.name);
+                    yield Math.ceil(values.getFirst());
+                }
+                case "round" -> {
+                    requireArgCount(1, values, this.name);
+                    yield Math.rint(values.getFirst());
+                }
+                case "min" -> {
+                    requireArgCount(2, values, this.name);
+                    yield Math.min(values.get(0), values.get(1));
+                }
+                case "max" -> {
+                    requireArgCount(2, values, this.name);
+                    yield Math.max(values.get(0), values.get(1));
+                }
+                case "pow" -> {
+                    requireArgCount(2, values, this.name);
+                    yield Math.pow(values.get(0), values.get(1));
+                }
+                case "clamp" -> {
+                    requireArgCount(3, values, this.name);
+                    yield Math.max(values.get(1), Math.min(values.get(0), values.get(2)));
+                }
                 default -> throw new IllegalArgumentException("Unknown function in formula: " + this.name);
             };
         }
 
-        private static double requireArgCount(final int expected, final List<Double> values, final String name, final double result) {
+        private static void requireArgCount(final int expected, final List<Double> values, final String name) {
             if (values.size() != expected) {
                 throw new IllegalArgumentException("Function " + name + " expects " + expected + " arguments, got " + values.size());
             }
-
-            return result;
         }
     }
 

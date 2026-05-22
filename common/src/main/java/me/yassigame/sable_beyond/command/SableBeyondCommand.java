@@ -12,7 +12,7 @@ public final class SableBeyondCommand {
                 .requires(source -> source.hasPermission(2));
 
         SableBeyondMassCommand.addSubcommands(root);
-
+        SableBeyondSystemInfoCommand.addSubcommands(root);
         dispatcher.register(root);
     }
 }

@@ -5,8 +5,11 @@
   "minVersion": "0.8",
   "client": [],
   "mixins": [
+    "compatibility.sable.PhysicsBlockPropertyHelperMixin",
+    "compatibility.sable.SubLevelAssemblyHelperDynamicMassMixin",
     "entity.EntityPhysicsCompanionMixin",
-    "entity.EntityMassNbtMixin"
+    "entity.EntityMassNbtMixin",
+    "world.LevelDynamicMassMixin"
   ],
   "injectors": {
     "defaultRequire": 1

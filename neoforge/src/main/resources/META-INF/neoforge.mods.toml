@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
-#issueTrackerURL = ""
+updateJSONURL = "https://api.modrinth.com/updates/sable-beyond/forge_updates.json?neoforge=only"
+issueTrackerURL = "https://github.com/YassiGame/SableBeyond"
 license = "MIT"
 
 [[mods]]
@@ -40,6 +41,13 @@ type = "required"
 versionRange = "[0,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.sable_beyond]]
+modId = "cloth_config"
+type = "required"
+versionRange = "[15.0.140,)"
+ordering = "NONE"
+side = "CLIENT"
 
 [[mixins]]
 config = "sable_beyond.mixins.json"

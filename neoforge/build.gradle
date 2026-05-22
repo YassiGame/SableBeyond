@@ -58,12 +58,13 @@ dependencies {
     compileOnly "dev.ryanhcode.sable-companion:sable-companion-common-${rootProject.minecraft_version}:${rootProject.sable_companion_version}"
     runtimeOnly "dev.ryanhcode.sable:sable-neoforge-${rootProject.minecraft_version}:${rootProject.sable_version}"
     implementation("com.tterrag.registrate:Registrate:${rootProject.registrate_version}")
+    modImplementation "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
     if (catalogueEnabled) {
         runtimeOnly "curse.maven:catalogue-459701:${rootProject.catalogue_version}"
     }
 
-    compileOnly("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    compileOnlyApi("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')

@@ -71,6 +71,14 @@ subprojects {
             url = "https://maven.terraformersmc.com/"
         }
         maven {
+            name = 'Architectury'
+            url = 'https://maven.architectury.dev/'
+        }
+        maven {
+            name = 'Shedaniel Maven'
+            url = 'https://maven.shedaniel.me/'
+        }
+        maven {
             name = 'Modrinth'
             url = 'https://api.modrinth.com/maven'
             content {

@@ -7,7 +7,7 @@ import com.simibubi.create.content.kinetics.mechanicalArm.ArmPlacementPacket;
 import com.simibubi.create.foundation.utility.CreateLang;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.SubLevel;
-import me.yassigame.sable_beyond.neoforge.SableBeyondNeoForgeConfig;
+import me.yassigame.sable_beyond.neoforge.config.SableBeyondNeoForgeConfig;
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

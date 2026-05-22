@@ -4,7 +4,7 @@ import dev.ryanhcode.sable.api.physics.object.box.BoxPhysicsObject;
 import dev.ryanhcode.sable.companion.math.Pose3d;
 import dev.ryanhcode.sable.companion.math.Pose3dc;
 import dev.ryanhcode.sable.sublevel.system.SubLevelPhysicsSystem;
-import me.yassigame.sable_beyond.api.mass.MassRegistry;
+import me.yassigame.sable_beyond.api.mass.EntityMass;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// experimental player physics adding a sable collision box to the player a mass to it
+// experimental player physics adding a sable collision box to the player and a mass to it
 // not fan at all with this code, hello neighbor type of physics really buggy
 
-@Mixin(Entity.class)
+@Mixin(Player.class)
 public abstract class EntityPhysicsCompanionMixin {
     @Unique
     private static final double REBUILD_EPSILON = 1.0E-6;
@@ -68,24 +68,24 @@ public abstract class EntityPhysicsCompanionMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void sableBeyond$syncPhysicsCompanion(final CallbackInfo ci) {
-        final Entity entity = (Entity) (Object) this;
-        if (!(entity instanceof Player) || !(entity.level() instanceof final ServerLevel serverLevel)) {
+        final Player player = (Player) (Object) this;
+        if (!(player.level() instanceof final ServerLevel serverLevel)) {
             return;
         }
 
-        if (!MassRegistry.isMassAppliedEntity(entity)) {
+        if (!EntityMass.isMassAppliedEntity(player)) {
             this.removePhysicsCompanion();
             return;
         }
 
-        if (!MassRegistry.isExperimentalPlayerSublevelInteractionEnabled() && !MassRegistry.isExperimentalPlayerMassEnabled()) {
+        if (!EntityMass.isExperimentalPlayerSublevelInteractionEnabled() && !EntityMass.isExperimentalPlayerMassEnabled()) {
             this.removePhysicsCompanion();
             return;
         }
 
         double mass;
-        if (MassRegistry.isExperimentalPlayerMassEnabled()) {
-            mass = MassRegistry.resolveMass(entity);
+        if (EntityMass.isExperimentalPlayerMassEnabled()) {
+            mass = EntityMass.resolveMass(player);
             if (mass <= 0.0) {
                 this.removePhysicsCompanion();
                 return;
@@ -94,7 +94,7 @@ public abstract class EntityPhysicsCompanionMixin {
             mass = 0;
         }
 
-        final AABB box = entity.getBoundingBox();
+        final AABB box = player.getBoundingBox();
         final double halfX = box.getXsize() * 0.5;
         final double halfY = this.getCompanionHalfY(box);
         final double halfZ = box.getZsize() * 0.5;
@@ -106,7 +106,7 @@ public abstract class EntityPhysicsCompanionMixin {
 
         if (this.shouldRebuild(serverLevel, halfX, halfY, halfZ, mass)) {
             this.removePhysicsCompanion();
-            this.createPhysicsCompanion(entity, serverLevel, mass, halfX, halfY, halfZ, box);
+            this.createPhysicsCompanion(player, serverLevel, mass, halfX, halfY, halfZ, box);
             return;
         }
 
@@ -124,7 +124,7 @@ public abstract class EntityPhysicsCompanionMixin {
         physicsSystem.getPipeline().teleport(this.physicsCompanion, this.physicsCompanionCenter, this.physicsCompanionOrientation.identity());
 
         /**
-        final Vector3d targetVelocity = this.getTargetVelocity(entity);
+        final Vector3d targetVelocity = this.getTargetVelocity(player);
         this.clampMagnitude(targetVelocity, MAX_TARGET_VELOCITY);
         final Vector3d currentVelocity = physicsSystem.getPipeline().getLinearVelocity(this.physicsCompanion, new Vector3d());
         final Vector3d deltaVelocity = targetVelocity.sub(currentVelocity, new Vector3d()).mul(FOLLOW_STRENGTH);
@@ -135,7 +135,7 @@ public abstract class EntityPhysicsCompanionMixin {
 
         this.physicsCompanion.updatePose();
         this.renderDebugCollisionBox(serverLevel);
-        this.updateLastPlayerCenter(entity);
+        this.updateLastPlayerCenter(player);
     }
 
     @Inject(method = "remove", at = @At("HEAD"))
@@ -163,7 +163,7 @@ public abstract class EntityPhysicsCompanionMixin {
     }
 
     @Unique
-    private void createPhysicsCompanion(final Entity entity, final ServerLevel serverLevel, final double mass, final double halfX, final double halfY, final double halfZ, final AABB box) {
+    private void createPhysicsCompanion(final Player player, final ServerLevel serverLevel, final double mass, final double halfX, final double halfY, final double halfZ, final AABB box) {
         final SubLevelPhysicsSystem physicsSystem = SubLevelPhysicsSystem.get(serverLevel);
         if (physicsSystem == null) {
             return;
@@ -178,7 +178,7 @@ public abstract class EntityPhysicsCompanionMixin {
         physicsSystem.getPipeline().teleport(this.physicsCompanion, this.physicsCompanionCenter, this.physicsCompanionOrientation);
         this.physicsCompanion.updatePose();
         this.renderDebugCollisionBox(serverLevel);
-        this.updateLastPlayerCenter(entity);
+        this.updateLastPlayerCenter(player);
 
         this.physicsCompanionLevel = serverLevel;
         this.physicsCompanionHalfX = halfX;
@@ -206,13 +206,13 @@ public abstract class EntityPhysicsCompanionMixin {
     }
 
     @Unique
-    private Vector3d getTargetVelocity(final Entity entity) {
+    private Vector3d getTargetVelocity(final Player player) {
         if (!this.hasLastPlayerCenter) {
-            this.updateLastPlayerCenter(entity);
+            this.updateLastPlayerCenter(player);
             return new Vector3d();
         }
 
-        final AABB box = entity.getBoundingBox();
+        final AABB box = player.getBoundingBox();
         final Vector3d currentCenter = this.getCompanionCenter(box, new Vector3d());
         final Vector3d velocity = new Vector3d(
                 (currentCenter.x - this.lastPlayerCenter.x) * TARGET_VELOCITY_SCALE,
@@ -222,7 +222,7 @@ public abstract class EntityPhysicsCompanionMixin {
 
         // getDeltaMovement keeps vanilla gravity even while grounded. The companion box should
         // instead follow the player's actual world displacement from this tick.
-        if (entity.onGround() && velocity.y < 0.0) {
+        if (player.onGround() && velocity.y < 0.0) {
             velocity.y = 0.0;
         }
 
@@ -230,8 +230,8 @@ public abstract class EntityPhysicsCompanionMixin {
     }
 
     @Unique
-    private void updateLastPlayerCenter(final Entity entity) {
-        final AABB box = entity.getBoundingBox();
+    private void updateLastPlayerCenter(final Player player) {
+        final AABB box = player.getBoundingBox();
         this.getCompanionCenter(box, this.lastPlayerCenter);
         this.hasLastPlayerCenter = true;
     }
@@ -246,7 +246,7 @@ public abstract class EntityPhysicsCompanionMixin {
         double minY = box.minY;
         double maxY = box.maxY + PLAYER_COLLISION_TOP;
 
-        if (!MassRegistry.isExperimentalPlayerMassEnabled()) {
+        if (!EntityMass.isExperimentalPlayerMassEnabled()) {
             minY += PLAYER_INTERACTION_FEET_OFFSET;
         }
 
@@ -262,7 +262,7 @@ public abstract class EntityPhysicsCompanionMixin {
         final double centerX = (minX + maxX) * 0.5;
         final double centerZ = (minZ + maxZ) * 0.5;
 
-        final double minY = box.minY + (!MassRegistry.isExperimentalPlayerMassEnabled() ? PLAYER_INTERACTION_FEET_OFFSET : 0.0);
+        final double minY = box.minY + (!EntityMass.isExperimentalPlayerMassEnabled() ? PLAYER_INTERACTION_FEET_OFFSET : 0.0);
         final double halfY = this.getCompanionHalfY(box);
         return dest.set(centerX, minY + halfY, centerZ);
     }
