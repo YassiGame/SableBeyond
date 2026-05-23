@@ -88,4 +88,6 @@ ___
 </p>
 
 # The Config Page
-<img width="1000" height="auto" alt="Capture d’écran 2026-05-22 à 10 01 09 PM" src="https://github.com/user-attachments/assets/0fb4920e-e505-4ccc-adb2-bd34b3cc516a" />
+<p align="center">
+    <img width="1000" height="auto" alt="Capture d’écran 2026-05-22 à 10 01 09 PM" src="https://github.com/user-attachments/assets/0fb4920e-e505-4ccc-adb2-bd34b3cc516a" />
+</p>
