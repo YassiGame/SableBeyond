@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report a bug with the Minecraft mod.
-title: "[Bug]: "
+title: "Bug: "
 labels: ["bug", "triage"]
 
 body:
