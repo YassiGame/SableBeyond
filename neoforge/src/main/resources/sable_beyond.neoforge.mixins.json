@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "me.yassigame.sable_beyond.neoforge.mixin",
+  "plugin": "me.yassigame.sable_beyond.neoforge.mixin.SableBeyondNeoForgeMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
   "mixinextras": {
@@ -18,7 +19,8 @@
     "compatibility.create.fluid_tank.FluidTankDynamicMass",
     "compatibility.create.spout.SpoutDynamicMass",
     "compatibility.create.drain.DrainDynamicMass",
-    "compatibility.create.basin.BasinTankDynamicMass"
+    "compatibility.create.basin.BasinTankDynamicMass",
+    "compatibility.sliceanddice.sprinkler.SprinklerBehaviourSublevel"
   ],
   "injectors": {
     "defaultRequire": 1
