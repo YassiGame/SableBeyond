@@ -86,14 +86,18 @@ public final class DynamicMass {
         return discardBlockMass(key);
     }
 
-    public static boolean discardBlockMassAfterBlockChange(final Level level, final BlockPos pos) {
+    public static boolean clearBlockMassBeforeBlockChange(final Level level, final BlockPos pos) {
+        restoreSavedMasses(level);
         final BlockMassKey key = BlockMassKey.from(level, pos);
         if (PRESERVED_BLOCK_STATE_CHANGE_KEYS.remove(key)) {
             return false;
         }
 
-        removeSavedBlockMass(level, key);
-        return discardBlockMass(key);
+        if (!hasBlockMass(key)) {
+            return false;
+        }
+
+        return clearBlockMassDetailed(level, pos).changed();
     }
 
     public static boolean moveBlockMass(

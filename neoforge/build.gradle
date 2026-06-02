@@ -4,6 +4,7 @@ plugins {
 
 def jadeEnabled = providers.gradleProperty("jade_enabled").map { it.toBoolean() }.getOrElse(true)
 def aeronauticsEnabled = providers.gradleProperty("aeronautics_enabled").map { it.toBoolean() }.getOrElse(true)
+def sliceAndDiceEnabled = providers.gradleProperty("slice_and_dice_enabled").map { it.toBoolean() }.getOrElse(true)
 def catalogueEnabled = providers.gradleProperty("catalogue_enabled").map { it.toBoolean() }.getOrElse(true)
 
 
@@ -48,12 +49,19 @@ dependencies {
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${rootProject.minecraft_version}:${rootProject.flywheel_version}")
     implementation("dev.engine-room.flywheel:flywheel-neoforge-${rootProject.minecraft_version}:${rootProject.flywheel_version}")
     implementation("foundry.veil:veil-neoforge-${project.minecraft_version}:${project.veil_version}")
+
     if (jadeEnabled) {
         runtimeOnly("maven.modrinth:jade:${rootProject.jade_version}+neoforge")
     }
     if (aeronauticsEnabled) {
         runtimeOnly("maven.modrinth:create-aeronautics:${rootProject.aronautics_version}+mc${rootProject.minecraft_version}")
     }
+    if (sliceAndDiceEnabled) {
+        runtimeOnly("maven.modrinth:slice-and-dice:${rootProject.slice_and_dice_version}-neoforge,${rootProject.minecraft_version}")
+    }
+    implementation("maven.modrinth:kotlin-for-forge:NrSebcsG")
+    implementation("maven.modrinth:slice-and-dice:${rootProject.slice_and_dice_version}-neoforge,${rootProject.minecraft_version}")
+
     compileOnly("dev.ryanhcode.sable:sable-common-${rootProject.minecraft_version}:${rootProject.sable_version}") { transitive = false }
     compileOnly "dev.ryanhcode.sable-companion:sable-companion-common-${rootProject.minecraft_version}:${rootProject.sable_companion_version}"
     runtimeOnly "dev.ryanhcode.sable:sable-neoforge-${rootProject.minecraft_version}:${rootProject.sable_version}"

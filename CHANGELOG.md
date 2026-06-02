@@ -36,3 +36,7 @@ Example:
 - (Common) Added a new config entry for living entity mass. It is now possible to apply mass only to players
 - (Common) Added a Sable Beyond button to the title screen and pause screen for easy access to the config (can be disabled)
 - (Common) Dynamic Mass and Entity Mass are now disabled by default (change this in the config)
+
+## [0.0.3] - Dynamic Mass fixes
+### FIXES
+- (Common) Dynamic mass now correctly syncs changes when a block with dynamic mass is broken.
