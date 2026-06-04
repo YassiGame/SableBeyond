@@ -37,6 +37,9 @@ Example:
 - (Common) Added a Sable Beyond button to the title screen and pause screen for easy access to the config (can be disabled)
 - (Common) Dynamic Mass and Entity Mass are now disabled by default (change this in the config)
 
-## [0.0.3] - Dynamic Mass fixes
+## [0.0.3] - Dynamic Mass hotfix
 ### FIXES
 - (Common) Dynamic mass now correctly syncs changes when a block with dynamic mass is broken.
+
+## [0.0.4] - Test Fix
+- (NeoForge) Testing the fix of sable github for mechanical hand
