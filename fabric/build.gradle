@@ -32,20 +32,21 @@ configurations {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
 
-    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
-    include "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
+    include "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
 
-    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
-    compileOnly("dev.ryanhcode.sable:sable-common-${rootProject.minecraft_version}:${rootProject.sable_version}") { transitive = false }
+    modCompileOnly("com.terraformersmc:modmenu:${modmenu_version}")
+    compileOnly("dev.ryanhcode.sable:sable-common-${minecraft_version}:${sable_version}") { transitive = false }
+    compileOnly "dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}"
 
     if (modmenuEnabled) {
-        modRuntimeOnly("com.terraformersmc:modmenu:${project.modmenu_version}")
+        modRuntimeOnly("com.terraformersmc:modmenu:${modmenu_version}")
     }
-    sableFabricRuntime("dev.ryanhcode.sable:sable-fabric-${rootProject.minecraft_version}:${rootProject.sable_version}")
+    sableFabricRuntime("dev.ryanhcode.sable:sable-fabric-${minecraft_version}:${sable_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

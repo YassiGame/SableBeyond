@@ -12,6 +12,9 @@ dependencies {
     // Cloth Config has loader artifacts, so the Fabric artifact is used for common compile-time API.
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
 
+    // for player ragdoll compatibility
+    modCompileOnly(files(rootProject.file("libs/sable_player_ragdoll-1.21.1-0.3.0.jar")))
+
     // Example unit-test setup. These tests run with Gradle and do not launch Minecraft.
     testImplementation platform("org.junit:junit-bom:5.10.2")
     testImplementation "org.junit.jupiter:junit-jupiter"

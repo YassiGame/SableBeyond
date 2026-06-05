@@ -39,39 +39,36 @@ repositories {
 }
 
 dependencies {
-    neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
+    neoForge "net.neoforged:neoforge:$neoforge_version"
 
-    compileOnly "io.github.llamalad7:mixinextras-common:${rootProject.mixinextras_version}"
-    annotationProcessor "io.github.llamalad7:mixinextras-common:${rootProject.mixinextras_version}"
+    compileOnly "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
+    annotationProcessor "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
 
-    implementation("com.simibubi.create:create-${rootProject.minecraft_version}:${rootProject.create_version}") { transitive = false }
-    implementation("net.createmod.ponder:ponder-neoforge:${rootProject.ponder_version}+mc${rootProject.minecraft_version}")
-    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${rootProject.minecraft_version}:${rootProject.flywheel_version}")
-    implementation("dev.engine-room.flywheel:flywheel-neoforge-${rootProject.minecraft_version}:${rootProject.flywheel_version}")
-    implementation("foundry.veil:veil-neoforge-${project.minecraft_version}:${project.veil_version}")
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    implementation("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
     if (jadeEnabled) {
-        runtimeOnly("maven.modrinth:jade:${rootProject.jade_version}+neoforge")
+        runtimeOnly("maven.modrinth:jade:${jade_version}+neoforge")
     }
     if (aeronauticsEnabled) {
-        runtimeOnly("maven.modrinth:create-aeronautics:${rootProject.aronautics_version}+mc${rootProject.minecraft_version}")
+        runtimeOnly("maven.modrinth:create-aeronautics:${aronautics_version}+mc${minecraft_version}")
     }
     if (sliceAndDiceEnabled) {
-        runtimeOnly("maven.modrinth:slice-and-dice:${rootProject.slice_and_dice_version}-neoforge,${rootProject.minecraft_version}")
+        runtimeOnly("maven.modrinth:slice-and-dice:${slice_and_dice_version}-neoforge,${minecraft_version}")
     }
+
     implementation("maven.modrinth:kotlin-for-forge:NrSebcsG")
-    implementation("maven.modrinth:slice-and-dice:${rootProject.slice_and_dice_version}-neoforge,${rootProject.minecraft_version}")
+    compileOnly("maven.modrinth:slice-and-dice:${slice_and_dice_version}-neoforge,${minecraft_version}")
 
-    compileOnly("dev.ryanhcode.sable:sable-common-${rootProject.minecraft_version}:${rootProject.sable_version}") { transitive = false }
-    compileOnly "dev.ryanhcode.sable-companion:sable-companion-common-${rootProject.minecraft_version}:${rootProject.sable_companion_version}"
-    runtimeOnly "dev.ryanhcode.sable:sable-neoforge-${rootProject.minecraft_version}:${rootProject.sable_version}"
-    implementation("com.tterrag.registrate:Registrate:${rootProject.registrate_version}")
+    api ("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}")
 
-    modImplementation "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
-    include "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+    include "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
 
     if (catalogueEnabled) {
-        runtimeOnly "curse.maven:catalogue-459701:${rootProject.catalogue_version}"
+        runtimeOnly "curse.maven:catalogue-459701:${catalogue_version}"
     }
 
     compileOnlyApi("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
