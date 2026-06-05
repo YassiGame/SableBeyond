@@ -17,8 +17,8 @@ public final class SableBeyondFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             DynamicMass.resetRuntimeBlockMasses();
             SableBeyondConfigLoader.load();
-            DynamicMass.restoreSavedMasses(server);
         });
+        ServerLifecycleEvents.SERVER_STARTED.register(DynamicMass::restoreSavedMasses);
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> DynamicMass.resetRuntimeBlockMasses());
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> SableBeyondCommand.register(dispatcher, registryAccess));
         SableBeyondFabricSableHooks.register();
