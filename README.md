@@ -36,7 +36,7 @@ Sable Beyond expands the Sable mod with additional features, quality-of-life imp
 | 0.0.1 | Entity mass system, configurable with formulas, etc. *(disabled by default)* | ✅ | ✅ |
 | 0.0.2 | Basin in sublevels placed upside down drops their items *(disabled by default)* | ✅ | ❌ |
 | 0.0.2 | Dynamic mass system, real-time mass changing *(disabled by default)* | ✅ | ✅ |
-| 0.0.4 | Better fire spreading and fire goes out when the sublevel is in water or in a solid block | ✅ | ✅ |
+| 0.4.0 | Better fire spreading and fire goes out when the sublevel is in water or in a solid block | ✅ | ✅ |
 
 ___
 ## Entity Mass *(disabled by default)*
