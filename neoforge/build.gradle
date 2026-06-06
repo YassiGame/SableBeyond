@@ -93,3 +93,33 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
 }
+
+publishMods {
+    file = remapJar.archiveFile
+    changelog = rootProject.releaseChangelog
+    type = providers.gradleProperty("release_type").map { releaseType -> me.modmuss50.mpp.ReleaseType.of(releaseType) }.get()
+    displayName = "neoforge${rootProject.minecraft_version}+v${project.version}"
+    modLoaders.add("neoforge")
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = providers.gradleProperty("modrinth_project_id")
+        minecraftVersions.add(rootProject.minecraft_version)
+
+        requires("sable", "create")
+        embeds("cloth-config")
+    }
+
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = providers.gradleProperty("curseforge_project_id")
+        projectSlug = providers.gradleProperty("curseforge_project_slug")
+        minecraftVersions.add(rootProject.minecraft_version)
+        javaVersions.add(JavaVersion.VERSION_21)
+        clientRequired = true
+        serverRequired = true
+
+        requires("sable", "create")
+        embeds("cloth-config")
+    }
+}

@@ -9,7 +9,8 @@
     "compatibility.sable.SubLevelAssemblyHelperDynamicMassMixin",
     "entity.EntityPhysicsCompanionMixin",
     "entity.EntityMassNbtMixin",
-    "world.LevelDynamicMassMixin"
+    "world.LevelDynamicMassMixin",
+    "fire.LavaFluidRandomTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1

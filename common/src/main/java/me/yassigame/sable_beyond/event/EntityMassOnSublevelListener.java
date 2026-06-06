@@ -1,5 +1,6 @@
 package me.yassigame.sable_beyond.event;
 
+import dev.leo.sableplayerragdoll.physics.RagdollAssemblyHelper;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.physics.force.ForceGroup;
 import dev.ryanhcode.sable.api.physics.force.ForceGroups;
@@ -10,12 +11,15 @@ import dev.ryanhcode.sable.physics.config.dimension_physics.DimensionPhysicsData
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import me.yassigame.sable_beyond.api.event.EntityOnSublevelGroundEvent;
 import me.yassigame.sable_beyond.api.mass.EntityMass;
+import me.yassigame.sable_beyond.platform.ModPlatform;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+
+import java.util.Objects;
 
 public final class EntityMassOnSublevelListener {
     private static final String BEARING_CONTRAPTION_ENTITY_SUFFIX = "BearingContraptionEntity";
@@ -44,6 +48,16 @@ public final class EntityMassOnSublevelListener {
         // If only player mass activated
         if (!(entity instanceof Player) && EntityMass.isLivingEntityOnlyPlayerMassEnabled()) {
             return;
+        }
+
+        // TODO DO BETTER
+        // If ragdol activated (only on neoforge)
+        if (Objects.equals(ModPlatform.getLoaderName().toLowerCase(), "neoforge")) {
+            if (ModPlatform.isModLoaded("sable_player_ragdoll")) {
+                if (RagdollAssemblyHelper.isRagdollPart(subLevel.getUniqueId())) {
+                    return;
+                }
+            }
         }
 
         final Vector3d globalPoint = new Vector3d(entity.getX(), entity.getY(), entity.getZ());

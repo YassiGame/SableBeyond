@@ -41,5 +41,9 @@ Example:
 ### FIXES
 - (Common) Dynamic mass now correctly syncs changes when a block with dynamic mass is broken.
 
-## [0.0.4] - Test Fix
-- (NeoForge) Testing the fix of sable github for mechanical hand
+## [0.4.0] - Fire Update ? (Like, not “fire” as in a cool update but I mean literal fire update. Ahhh please send help...)
+- (Fabric) Sorry Fabric users iam lwk silly and didn't notice the dynamic mass crash at startup, now its fixed
+- (Common) Adding a better fire spreading on sublevels plus fire goes out when the sublevel is in water or in a solid block
+- (NeoForge) Added some fixes of mechanical hand (stolen) from sable (just temporary, waiting for the official fix)
+- (NeoForge) Temporary support for the sprinkler of the create addon slice and dice, now working with sable sublevels
+- (NeoForge) Added support to the sable addon player ragdoll, now the entity mass is not applied on ragdolls sublevel

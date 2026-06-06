@@ -2,10 +2,32 @@ plugins {
     id 'dev.architectury.loom' version '1.14-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'me.modmuss50.mod-publish-plugin' version '1.1.0' apply false
 }
 
 architectury {
     minecraft = project.minecraft_version
+}
+
+ext.releaseChangelog = providers.provider {
+    def changelogFilePath = providers.gradleProperty("publish_changelog_file").orNull
+    if (changelogFilePath != null && !changelogFilePath.isBlank()) {
+        def changelogFile = rootProject.file(changelogFilePath)
+        if (!changelogFile.isFile()) {
+            throw new GradleException("Configured publish_changelog_file does not exist: ${changelogFile}")
+        }
+        return changelogFile.text.trim()
+    }
+
+    def changelog = rootProject.file("CHANGELOG.md").text
+    def version = rootProject.mod_version
+    def sectionPattern = ~/(?ms)^## \[${java.util.regex.Pattern.quote(version)}\][^\n]*\n(.*?)(?=^## \[|\z)/
+    def matcher = changelog =~ sectionPattern
+    if (!matcher.find()) {
+        throw new GradleException("Could not find CHANGELOG.md section for mod_version ${version}")
+    }
+
+    return matcher.group(1).trim()
 }
 
 allprojects {
@@ -17,6 +39,7 @@ subprojects {
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
     apply plugin: 'maven-publish'
+    apply plugin: 'me.modmuss50.mod-publish-plugin'
 
     base {
         // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.

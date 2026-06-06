@@ -1,9 +1,6 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -149,3 +146,23 @@ jobs:
             --title "${{ steps.release_meta.outputs.title }}" \
             --notes-file release-notes.md \
             --target "$GITHUB_SHA"
+
+      - name: Publish to Modrinth and CurseForge
+        if: steps.release_check.outputs.exists != 'true'
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+          CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
+          CURSEFORGE_PROJECT_SLUG: ${{ vars.CURSEFORGE_PROJECT_SLUG }}
+        run: |
+          if [ -z "$MODRINTH_TOKEN" ] || [ -z "$CURSEFORGE_TOKEN" ] || [ -z "$MODRINTH_PROJECT_ID" ] || [ -z "$CURSEFORGE_PROJECT_ID" ]; then
+            echo "Modrinth/CurseForge credentials or project IDs are missing. Skipping external publishing."
+            exit 0
+          fi
+
+          ./gradlew fabric:publishMods neoforge:publishMods --stacktrace \
+            -Ppublish_changelog_file=release-notes.md \
+            -Pmodrinth_project_id="$MODRINTH_PROJECT_ID" \
+            -Pcurseforge_project_id="$CURSEFORGE_PROJECT_ID" \
+            -Pcurseforge_project_slug="$CURSEFORGE_PROJECT_SLUG"

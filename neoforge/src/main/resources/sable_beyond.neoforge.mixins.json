@@ -12,6 +12,7 @@
     "compatibility.create.mechanical_arm.MechanicalArmSublevelFailure"
   ],
   "mixins": [
+    "fire.FireTickMixin",
     "compatibility.create.fan.EncasedFanSubLevelAirflow",
     "compatibility.create.mechanical_arm.MechanicalArmConfigurationRefresh",
     "compatibility.create.mechanical_arm.MechanicalArmSublevelInteraction",
