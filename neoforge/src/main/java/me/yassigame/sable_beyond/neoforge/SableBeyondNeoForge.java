@@ -15,7 +15,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 @Mod(SableBeyond.MOD_ID)
@@ -43,7 +43,7 @@ public final class SableBeyondNeoForge {
         SableBeyondCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 
-    private void clearDynamicMassOnServerStarting(final ServerStartingEvent event) {
+    private void clearDynamicMassOnServerStarting(final ServerStartedEvent event) {
         DynamicMass.resetRuntimeBlockMasses();
         DynamicMass.restoreSavedMasses(event.getServer());
     }
