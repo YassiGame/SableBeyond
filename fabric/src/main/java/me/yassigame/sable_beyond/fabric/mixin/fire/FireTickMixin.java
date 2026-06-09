@@ -1,5 +1,7 @@
 package me.yassigame.sable_beyond.fabric.mixin.fire;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.yassigame.sable_beyond.utils.SableSubLevelPosHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -31,9 +32,6 @@ public abstract class FireTickMixin {
     @Invoker("getBurnOdds")
     protected abstract int invokeGetBurnOdds(BlockState state);
 
-    @Invoker("checkBurnOut")
-    protected abstract void invokeCheckBurnOut(Level level, BlockPos pos, int chance, RandomSource random, int age);
-
     @Inject(
             method = "tick",
             at = @At(
@@ -41,8 +39,7 @@ public abstract class FireTickMixin {
                     target = "Lnet/minecraft/server/level/ServerLevel;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;",
                     ordinal = 0,
                     shift = At.Shift.BEFORE
-            ),
-            cancellable = true
+            )
     )
     private void sableBeyond$extinguishSubLevelFireInWater(
             BlockState state,
@@ -77,7 +74,7 @@ public abstract class FireTickMixin {
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "tick",
             at = @At(
                     value = "INVOKE",
@@ -85,18 +82,16 @@ public abstract class FireTickMixin {
             )
     )
     private boolean sableBeyond$redirectValidFireLocation(
-            final FireBlock instance,
-            final BlockGetter level,
-            final BlockPos pos
+            FireBlock instance, BlockGetter level, BlockPos pos, Operation<Boolean> original
     ) {
         if (level instanceof Level actualLevel) {
             return this.isValidFireLocationAcrossSubLevels(actualLevel, pos);
         }
 
-        return this.invokeIsValidFireLocation(level, pos);
+        return original.call(instance, level, pos);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "tick",
             at = @At(
                     value = "INVOKE",
@@ -104,12 +99,7 @@ public abstract class FireTickMixin {
             )
     )
     private void sableBeyond$redirectCheckBurnOut(
-            final FireBlock instance,
-            final Level level,
-            final BlockPos pos,
-            final int chance,
-            final RandomSource random,
-            final int age
+            FireBlock instance, Level level, BlockPos pos, int chance, RandomSource random, int age, Operation<Void> original
     ) {
         final BlockPos resolvedPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
@@ -117,10 +107,10 @@ public abstract class FireTickMixin {
                 (candidateSubLevel, candidatePos) -> this.invokeGetBurnOdds(level.getBlockState(candidatePos)) > 0
         );
 
-        this.invokeCheckBurnOut(level, resolvedPos != null ? resolvedPos : pos, chance, random, age);
+        original.call(instance, level, resolvedPos != null ? resolvedPos : pos, chance, random, age);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "tick",
             at = @At(
                     value = "INVOKE",
@@ -128,9 +118,7 @@ public abstract class FireTickMixin {
             )
     )
     private int sableBeyond$redirectGetIgniteOdds(
-            final FireBlock instance,
-            final LevelReader level,
-            final BlockPos pos
+            FireBlock instance, LevelReader level, BlockPos pos, Operation<Integer> original
     ) {
         if (level instanceof Level actualLevel) {
             final BlockPos resolvedPos = SableSubLevelPosHelper.findMatchingBlockPos(
@@ -144,11 +132,11 @@ public abstract class FireTickMixin {
                     mutablePos.set(resolvedPos);
                 }
 
-                return this.invokeGetIgniteOdds(level, resolvedPos);
+                return original.call(instance, level, resolvedPos);
             }
         }
 
-        return this.invokeGetIgniteOdds(level, pos);
+        return original.call(instance, level, pos);
     }
 
     @Unique
