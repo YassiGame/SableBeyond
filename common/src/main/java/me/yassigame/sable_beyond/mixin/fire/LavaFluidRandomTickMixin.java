@@ -1,16 +1,15 @@
 package me.yassigame.sable_beyond.mixin.fire;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import me.yassigame.sable_beyond.utils.SableSubLevelPosHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.LavaFluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(LavaFluid.class)
@@ -22,7 +21,7 @@ public abstract class LavaFluidRandomTickMixin {
     @Invoker("isFlammable")
     protected abstract boolean invokeIsFlammable(LevelReader level, BlockPos pos);
 
-    @Redirect(
+    @WrapOperation(
             method = "randomTick",
             at = @At(
                     value = "INVOKE",
@@ -31,16 +30,9 @@ public abstract class LavaFluidRandomTickMixin {
             )
     )
     private BlockPos sableBeyond$redirectRandomTickOffset(
-            BlockPos blockPos,
-            int offsetX,
-            int offsetY,
-            int offsetZ,
-            Level level,
-            BlockPos pos,
-            FluidState state,
-            RandomSource random
+            BlockPos instance, int offsetX, int offsetY, int offsetZ, Operation<BlockPos> original, Level level
     ) {
-        final BlockPos offsetPos = blockPos.offset(offsetX, offsetY, offsetZ);
+        final BlockPos offsetPos = original.call(instance, offsetX, offsetY, offsetZ);
         final BlockPos matchingPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
                 offsetPos,
@@ -56,7 +48,7 @@ public abstract class LavaFluidRandomTickMixin {
         return matchingPos != null ? matchingPos : offsetPos;
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "randomTick",
             at = @At(
                     value = "INVOKE",
@@ -65,16 +57,9 @@ public abstract class LavaFluidRandomTickMixin {
             )
     )
     private BlockPos sableBeyond$redirectRandomTickOffsetForIgnition(
-            BlockPos blockPos,
-            int offsetX,
-            int offsetY,
-            int offsetZ,
-            Level level,
-            BlockPos pos,
-            FluidState state,
-            RandomSource random
+            BlockPos instance, int offsetX, int offsetY, int offsetZ, Operation<BlockPos> original, Level level
     ) {
-        final BlockPos offsetPos = blockPos.offset(offsetX, offsetY, offsetZ);
+        final BlockPos offsetPos = original.call(instance, offsetX, offsetY, offsetZ);
         final BlockPos matchingPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
                 offsetPos,
