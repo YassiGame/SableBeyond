@@ -38,7 +38,6 @@ Example:
 - (Common) Dynamic Mass and Entity Mass are now disabled by default (change this in the config)
 
 ## [0.0.3] - Dynamic Mass hotfix
-### FIXES
 - (Common) Dynamic mass now correctly syncs changes when a block with dynamic mass is broken.
 
 ## [0.4.0] - Fire Update ? (Like, not “fire” as in a cool update but I mean literal fire update. Ahhh please send help...)
@@ -47,3 +46,7 @@ Example:
 - (NeoForge) Added some fixes of mechanical hand (stolen) from sable (just temporary, waiting for the official fix)
 - (NeoForge) Temporary support for the sprinkler of the create addon slice and dice, now working with sable sublevels
 - (NeoForge) Added support to the sable addon player ragdoll, now the entity mass is not applied on ragdolls sublevel
+
+## [0.4.1] - Hot Fix mixins and server crash
+- (Common) Updated fire mixin code to improve compatibility with other mods (like ftbchunk)
+- (NeoForge) Dynamic mass now initializes once the server is ready instead of during startup, preventing a potential crash
