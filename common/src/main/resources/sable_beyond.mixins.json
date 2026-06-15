@@ -10,7 +10,8 @@
     "entity.EntityPhysicsCompanionMixin",
     "entity.EntityMassNbtMixin",
     "world.LevelDynamicMassMixin",
-    "fire.LavaFluidRandomTickMixin"
+    "fire.LavaFluidRandomTickMixin",
+    "fire.FireTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1
