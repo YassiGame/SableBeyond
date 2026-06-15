@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.util.Collection;
 import java.util.Objects;
 
 public final class EntityMassOnSublevelListener {
@@ -129,7 +130,12 @@ public final class EntityMassOnSublevelListener {
     }
 
     private static boolean isBearingMount(final ServerSubLevel subLevel) {
-        for (final KinematicContraption contraption : subLevel.getPlot().getContraptions()) {
+        if (subLevel.getPlot() == null) {
+            return false;
+        }
+
+        Collection<KinematicContraption> contraptionCollection = subLevel.getPlot().getContraptions();
+        for (final KinematicContraption contraption : contraptionCollection) {
             if (contraption.getClass().getSimpleName().endsWith(BEARING_CONTRAPTION_ENTITY_SUFFIX)) {
                 return true;
             }
