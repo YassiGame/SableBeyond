@@ -50,3 +50,7 @@ Example:
 ## [0.4.1] - Hot Fix mixins and server crash
 - (Common) Updated fire mixin code to improve compatibility with other mods (like ftbchunk)
 - (NeoForge) Dynamic mass now initializes once the server is ready instead of during startup, preventing a potential crash
+
+## [0.4.2] - Hot Fix Sable v2.0.1 entity mass crash
+- (Common) Some FireMixin clean up
+- (NeoForge) Fixed a crash of EntityMass with Sable v2.0.1

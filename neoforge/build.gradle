@@ -62,7 +62,7 @@ dependencies {
     implementation("maven.modrinth:kotlin-for-forge:NrSebcsG")
     compileOnly("maven.modrinth:slice-and-dice:${slice_and_dice_version}-neoforge,${minecraft_version}")
 
-    api ("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}")
+    api("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}")
 
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     include "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
