@@ -16,13 +16,11 @@
     "compatibility.create.fan.EncasedFanSubLevelAirflow",
     "compatibility.create.mechanical_arm.MechanicalArmConfigurationRefresh",
     "compatibility.create.mechanical_arm.MechanicalArmSublevelInteraction",
-    "compatibility.create.mechanical_arm.MechanicalArmBlockEntity",
     "compatibility.create.basin.BasinEmptyMouvement",
     "compatibility.create.fluid_tank.FluidTankDynamicMass",
     "compatibility.create.spout.SpoutDynamicMass",
     "compatibility.create.drain.DrainDynamicMass",
-    "compatibility.create.basin.BasinTankDynamicMass",
-    "compatibility.sliceanddice.sprinkler.SprinklerBehaviourSublevel"
+    "compatibility.create.basin.BasinTankDynamicMass"
   ],
   "injectors": {
     "defaultRequire": 1
