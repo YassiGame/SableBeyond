@@ -31,14 +31,7 @@ side = "BOTH"
 [[dependencies.sable_beyond]]
 modId = "sable"
 type = "required"
-versionRange = "[0,)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.sable_beyond]]
-modId = "create"
-type = "required"
-versionRange = "[0,)"
+versionRange = "[2.0.0,)"
 ordering = "AFTER"
 side = "BOTH"
 

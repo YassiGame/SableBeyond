@@ -53,4 +53,4 @@ Example:
 
 ## [0.4.2] - Hot Fix Sable v2.0.1 entity mass crash
 - (Common) Some FireMixin clean up
-- (NeoForge) Fixed a crash of EntityMass with Sable v2.0.1
+- (Common) Fixed a crash of EntityMass with Sable v2.0.1

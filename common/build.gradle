@@ -6,14 +6,15 @@ dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
 
-    api "dev.ryanhcode.sable:sable-common-${project.minecraft_version}:${project.sable_version}"
+    api("dev.ryanhcode.sable:sable-common-${minecraft_version}:${sable_version}")
+    api("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}")
     // Cloth Config has loader artifacts, so the Fabric artifact is used for common compile-time API.
-    modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+    modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
 
     // for player ragdoll compatibility
-    modCompileOnly(files(rootProject.file("libs/sable_player_ragdoll-1.21.1-0.3.0.jar")))
+    modCompileOnly("maven.modrinth:sable-player-ragdolls:${sable_ragdoll_version}")
 
     // Example unit-test setup. These tests run with Gradle and do not launch Minecraft.
     testImplementation platform("org.junit:junit-bom:5.10.2")

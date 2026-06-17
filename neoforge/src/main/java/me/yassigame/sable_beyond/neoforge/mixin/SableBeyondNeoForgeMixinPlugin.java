@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 public final class SableBeyondNeoForgeMixinPlugin implements IMixinConfigPlugin {
-    private static final String SLICE_AND_DICE_PACKAGE =
-            "me.yassigame.sable_beyond.neoforge.mixin.compatibility.sliceanddice.";
+    private static final String CREATE_PACKAGE =
+            "me.yassigame.sable_beyond.neoforge.mixin.compatibility.create.";
 
     private static boolean isModLoadedEarly(String modId) {
         LoadingModList loading = FMLLoader.getLoadingModList();
@@ -28,8 +28,8 @@ public final class SableBeyondNeoForgeMixinPlugin implements IMixinConfigPlugin 
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.startsWith(SLICE_AND_DICE_PACKAGE)) {
-            return isModLoadedEarly("sliceanddice");
+        if (mixinClassName.startsWith(CREATE_PACKAGE)) {
+            return isModLoadedEarly("create");
         }
         return true;
     }

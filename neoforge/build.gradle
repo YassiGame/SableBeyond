@@ -1,10 +1,12 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
 def jadeEnabled = providers.gradleProperty("jade_enabled").map { it.toBoolean() }.getOrElse(true)
 def aeronauticsEnabled = providers.gradleProperty("aeronautics_enabled").map { it.toBoolean() }.getOrElse(true)
-def sliceAndDiceEnabled = providers.gradleProperty("slice_and_dice_enabled").map { it.toBoolean() }.getOrElse(true)
+def ragdollEnabled = providers.gradleProperty("sable_ragdoll_enabled").map { it.toBoolean() }.getOrElse(true)
 def catalogueEnabled = providers.gradleProperty("catalogue_enabled").map { it.toBoolean() }.getOrElse(true)
 
 
@@ -44,6 +46,13 @@ dependencies {
     compileOnly "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
     annotationProcessor "io.github.llamalad7:mixinextras-common:${mixinextras_version}"
 
+    implementation("foundry.veil:veil-neoforge-${minecraft_version}:${veil_version}")
+    api("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}") { transitive = false }
+    api("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}")
+
+    include("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+    implementation("me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}")
+
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
     implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
@@ -53,25 +62,16 @@ dependencies {
         runtimeOnly("maven.modrinth:jade:${jade_version}+neoforge")
     }
     if (aeronauticsEnabled) {
-        runtimeOnly("maven.modrinth:create-aeronautics:${aronautics_version}+mc${minecraft_version}")
+        runtimeOnly("maven.modrinth:create-aeronautics:${aeronautics_version}+mc${minecraft_version}") { transitive = false }
     }
-    if (sliceAndDiceEnabled) {
-        runtimeOnly("maven.modrinth:slice-and-dice:${slice_and_dice_version}-neoforge,${minecraft_version}")
+    if (ragdollEnabled) {
+        runtimeOnly("maven.modrinth:sable-player-ragdolls:${sable_ragdoll_version}")
     }
-
-    implementation("maven.modrinth:kotlin-for-forge:NrSebcsG")
-    compileOnly("maven.modrinth:slice-and-dice:${slice_and_dice_version}-neoforge,${minecraft_version}")
-
-    api("dev.ryanhcode.sable:sable-neoforge-${minecraft_version}:${sable_version}")
-
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    include "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-
     if (catalogueEnabled) {
-        runtimeOnly "curse.maven:catalogue-459701:${catalogue_version}"
+        runtimeOnly("curse.maven:catalogue-459701:${catalogue_version}")
     }
 
-    compileOnlyApi("dev.latvian.mods:kubejs-neoforge:$kubejs_version")
+    compileOnlyApi("dev.latvian.mods:kubejs-neoforge:${kubejs_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
@@ -97,14 +97,14 @@ remapJar {
 publishMods {
     file = remapJar.archiveFile
     changelog = rootProject.releaseChangelog
-    type = providers.gradleProperty("release_type").map { releaseType -> me.modmuss50.mpp.ReleaseType.of(releaseType) }.get()
-    displayName = "neoforge${rootProject.minecraft_version}+v${project.version}"
+    type = providers.gradleProperty("release_type").map { releaseType -> ReleaseType.of(releaseType) }.get()
+    displayName = "neoforge${minecraft_version}+v${project.version}"
     modLoaders.add("neoforge")
 
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = providers.gradleProperty("modrinth_project_id")
-        minecraftVersions.add(rootProject.minecraft_version)
+        minecraftVersions.add(minecraft_version)
 
         requires("sable", "create")
         embeds("cloth-config")
@@ -114,7 +114,7 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         projectId = providers.gradleProperty("curseforge_project_id")
         projectSlug = providers.gradleProperty("curseforge_project_slug")
-        minecraftVersions.add(rootProject.minecraft_version)
+        minecraftVersions.add(minecraft_version)
         javaVersions.add(JavaVersion.VERSION_21)
         clientRequired = true
         serverRequired = true
