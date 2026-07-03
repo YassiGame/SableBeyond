@@ -55,7 +55,7 @@ Example:
 - (Common) Some FireMixin clean up
 - (Common) Fixed a crash of EntityMass with Sable v2.0.1
 
-## [0.5.0] - Water Update
+## [0.5.0] - The Water Update
 - (Common) Flowing Fluid apply forces to sublevels
 - (Common) Added config for the fire update and for flowing fluid
 - (Common) Added additional null checks to prevent potential crashes if a level is unexpectedly unavailable after the server starts
