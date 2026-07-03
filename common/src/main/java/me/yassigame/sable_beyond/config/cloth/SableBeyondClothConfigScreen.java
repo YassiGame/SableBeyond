@@ -9,10 +9,7 @@ import me.shedaniel.clothconfig2.gui.entries.SubCategoryListEntry;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import me.yassigame.sable_beyond.SableBeyond;
 import me.yassigame.sable_beyond.api.mass.EntityMass;
-import me.yassigame.sable_beyond.config.DynamicMassConfig;
-import me.yassigame.sable_beyond.config.EntityMassConfig;
-import me.yassigame.sable_beyond.config.OtherConfig;
-import me.yassigame.sable_beyond.config.SableBeyondConfig;
+import me.yassigame.sable_beyond.config.*;
 import me.yassigame.sable_beyond.platform.ModPlatform;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -75,6 +72,7 @@ public final class SableBeyondClothConfigScreen {
         addWelcomeConfigCategory(builder, entryBuilder);
         addEntityMassCategory(builder, entryBuilder, SableBeyondConfig.entityMass());
         addDynamicMassCategory(builder, entryBuilder, SableBeyondConfig.dynamicMass());
+        addCommonCategory(builder, entryBuilder, SableBeyondConfig.common());
         addOtherCategory(builder, entryBuilder, SableBeyondConfig.other());
         platformCategories.accept(builder);
 
@@ -144,13 +142,17 @@ public final class SableBeyondClothConfigScreen {
         category.addEntry(entryBuilder.startTextDescription(Component.translatable("config.sable_beyond.dynamic_mass.description")).build());
         category.addEntry(enabledEntry);
         category.addEntry(displayWhen(massOfBucketEntry, isEnabled(enabledEntry)));
-        if (Objects.equals(ModPlatform.getLoaderName().toLowerCase(), "neoforge")) {
+
+        if (ModPlatform.isModLoaded("create")) {
             // for create dynamic mass
             category.addEntry(displayWhen(dynamicMassCreateGroup(entryBuilder, dynamicMass), isEnabled(enabledEntry)));
         } else {
             // description for to apologize about the lack of features
-            category.addEntry(displayWhen(entryBuilder.startTextDescription(Component.translatable("config.sable_beyond.dynamic_mass.fabric")).build(), isEnabled(enabledEntry)));
+            if (Objects.equals(ModPlatform.getLoaderName().toLowerCase(), "fabric")) {
+                category.addEntry(displayWhen(entryBuilder.startTextDescription(Component.translatable("config.sable_beyond.dynamic_mass.fabric")).build(), isEnabled(enabledEntry)));
+            }
         }
+
     }
 
     private static AbstractConfigListEntry<?> dynamicMassCreateGroup(
@@ -386,6 +388,98 @@ public final class SableBeyondClothConfigScreen {
                 values -> itemEntity.items = entriesToMassMap(values)
         ), itemEntityEnabled));
         return subCategory(Component.translatable("config.sable_beyond.item_entity"), true, entries);
+    }
+
+    private static void addCommonCategory(
+            final ConfigBuilder builder,
+            final ConfigEntryBuilder entryBuilder,
+            final CommonConfig commonConfig
+    ) {
+        final ConfigCategory category = builder.getOrCreateCategory(Component.translatable("config.sable_beyond.common"));
+        category.addEntry(commonFireGroup(entryBuilder, commonConfig.fire));
+        category.addEntry(commonFlowingFluidGroup(entryBuilder, commonConfig.flowingFluid));
+
+    }
+
+    private static AbstractConfigListEntry<?> commonFireGroup(
+            final ConfigEntryBuilder entryBuilder,
+            final CommonConfig.FireConfig fireConfig
+    ) {
+        final List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
+
+        entries.add(booleanOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.fire.extinguish"),
+                Component.translatable("config.sable_beyond.common.fire.extinguish.tooltip"),
+                true,
+                () -> fireConfig.fire_extinguish,
+                value -> fireConfig.fire_extinguish = value
+        ));
+
+        entries.add(booleanOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.fire.spreading"),
+                Component.translatable("config.sable_beyond.common.fire.spreading.tooltip"),
+                true,
+                () -> fireConfig.fire_spreading,
+                value -> fireConfig.fire_spreading = value
+        ));
+
+        entries.add(booleanOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.fire.lava"),
+                Component.translatable("config.sable_beyond.common.fire.lava.tooltip"),
+                true,
+                () -> fireConfig.lava_fire_on_sublevel,
+                value -> fireConfig.lava_fire_on_sublevel = value
+        ));
+
+        return subCategory(Component.translatable("config.sable_beyond.common.fire"), true ,entries);
+    }
+
+    private static AbstractConfigListEntry<?> commonFlowingFluidGroup(
+            final ConfigEntryBuilder entryBuilder,
+            final CommonConfig.FlowingFluidConfig flowingFluidConfig
+    ) {
+        final List<AbstractConfigListEntry<?>> entries = new ArrayList<>();
+
+        entries.add(booleanOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.enabled"),
+                Component.translatable("config.sable_beyond.common.flowing_fluid.enabled.tooltip"),
+                true,
+                () -> flowingFluidConfig.enabled,
+                value -> flowingFluidConfig.enabled = value
+        ));
+
+        entries.add(doubleOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.flowing_fluid.force"),
+                Component.translatable("config.sable_beyond.common.flowing_fluid.force.tooltip"),
+                1.5d,
+                () -> flowingFluidConfig.force,
+                value -> flowingFluidConfig.force = value
+        ));
+
+        entries.add(doubleOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.flowing_fluid.lava_force_multiplier"),
+                Component.translatable("config.sable_beyond.common.flowing_fluid.lava_force_multiplier.tooltip"),
+                0.6d,
+                () -> flowingFluidConfig.lava_force_multiplier,
+                value -> flowingFluidConfig.lava_force_multiplier = value
+        ));
+
+        entries.add(doubleOption(
+                entryBuilder,
+                Component.translatable("config.sable_beyond.common.flowing_fluid.max_force"),
+                Component.translatable("config.sable_beyond.common.flowing_fluid.max_force.tooltip"),
+                120.0d,
+                () -> flowingFluidConfig.max_force,
+                value -> flowingFluidConfig.max_force = value
+        ));
+
+        return subCategory(Component.translatable("config.sable_beyond.common.flowing_fluid"), true ,entries);
     }
 
     private static void addOtherCategory(

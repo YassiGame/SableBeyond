@@ -6,8 +6,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-
-
 public final class SableBeyondIconButton extends Button {
     private static final ResourceLocation ICON = ResourceLocation.fromNamespaceAndPath(
             SableBeyond.MOD_ID,

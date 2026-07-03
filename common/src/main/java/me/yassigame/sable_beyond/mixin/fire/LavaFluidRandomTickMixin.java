@@ -2,6 +2,7 @@ package me.yassigame.sable_beyond.mixin.fire;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.yassigame.sable_beyond.config.SableBeyondConfig;
 import me.yassigame.sable_beyond.utils.SableSubLevelPosHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -33,6 +34,11 @@ public abstract class LavaFluidRandomTickMixin {
             BlockPos instance, int offsetX, int offsetY, int offsetZ, Operation<BlockPos> original, Level level
     ) {
         final BlockPos offsetPos = original.call(instance, offsetX, offsetY, offsetZ);
+
+        if (!SableBeyondConfig.common().fire.lava_fire_on_sublevel) {
+            return offsetPos;
+        }
+
         final BlockPos matchingPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
                 offsetPos,
@@ -60,6 +66,11 @@ public abstract class LavaFluidRandomTickMixin {
             BlockPos instance, int offsetX, int offsetY, int offsetZ, Operation<BlockPos> original, Level level
     ) {
         final BlockPos offsetPos = original.call(instance, offsetX, offsetY, offsetZ);
+
+        if (!SableBeyondConfig.common().fire.lava_fire_on_sublevel) {
+            return offsetPos;
+        }
+
         final BlockPos matchingPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
                 offsetPos,

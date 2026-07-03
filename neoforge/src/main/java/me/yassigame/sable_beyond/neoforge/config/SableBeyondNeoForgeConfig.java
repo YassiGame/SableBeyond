@@ -5,7 +5,7 @@ import me.yassigame.sable_beyond.config.JsonConfigFile;
 
 import java.nio.file.Path;
 
-// FIXME needs cleaning
+// FIXME needs cleaning (lazy ass)
 
 public final class SableBeyondNeoForgeConfig {
     public static final String FILE_NAME = "neoforge-compatibility.json";
@@ -26,6 +26,7 @@ public final class SableBeyondNeoForgeConfig {
         public MechanicalArmConfig mechanical_arm = MechanicalArmConfig.defaults();
         public EncasedFanConfig encased_fan = EncasedFanConfig.defaults();
         public BasinConfig basin = BasinConfig.defaults();
+        public WaterWheelConfig water_wheel = WaterWheelConfig.defaults();
 
         public static CreateConfig defaults() {
             return new CreateConfig();
@@ -42,6 +43,7 @@ public final class SableBeyondNeoForgeConfig {
 
     public static final class EncasedFanConfig {
         public boolean apply_force_to_touched_sublevels = true;
+        public double fan_force_multiplier = 0.2d;
 
         public static EncasedFanConfig defaults() {
             return new EncasedFanConfig();
@@ -49,11 +51,24 @@ public final class SableBeyondNeoForgeConfig {
     }
 
     public static final class BasinConfig {
-        public boolean basin_empty_input_inventory = false;
-        public boolean basin_empty_output_inventory = false;
+        public boolean empty_input_inventory = false;
+        public boolean empty_output_inventory = false;
+        public boolean fluid_escaping = false;
+        public boolean fill_from_world_fluid = false;
 
         public static BasinConfig defaults() {
             return new BasinConfig();
+        }
+    }
+
+    public static final class WaterWheelConfig {
+        public boolean thrust_enabled = true;
+        public boolean realistic_thrust_mode = false;
+        public double thrust_per_rpm = 2d;
+        public double small_wheel_factor = 0.5d;
+
+        public static WaterWheelConfig defaults() {
+            return new WaterWheelConfig();
         }
     }
 
@@ -146,9 +161,20 @@ public final class SableBeyondNeoForgeConfig {
         return createConfig.basin;
     }
 
+    private WaterWheelConfig waterWheel() {
+        final CreateConfig createConfig = create();
+        if (createConfig.water_wheel == null) {
+            createConfig.water_wheel = WaterWheelConfig.defaults();
+        }
+
+        return createConfig.water_wheel;
+    }
+
     private void normalize() {
         mechanicalArm();
         encasedFanAirflow();
         basin();
+        waterWheel();
+
     }
 }

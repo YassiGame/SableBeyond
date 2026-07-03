@@ -164,19 +164,24 @@ public final class DynamicMass {
         }
 
         restoreSavedMasses(server);
+        final DynamicMassSavedData savedData = DynamicMassSavedData.get(server);
         final List<BlockMassKey> keys = List.copyOf(BLOCK_MASSES.keySet());
         for (final BlockMassKey key : keys) {
             final ServerLevel level = server.getLevel(key.dimension());
             if (level == null) {
                 discardBlockMass(key);
-                DynamicMassSavedData.get(server).removeMass(key);
+                if (savedData != null) {
+                    savedData.removeMass(key);
+                }
                 continue;
             }
 
             clearBlockMassDetailed(level, BlockPos.of(key.pos()));
         }
 
-        DynamicMassSavedData.get(server).clearMasses();
+        if (savedData != null) {
+            savedData.clearMasses();
+        }
         PRESERVED_BLOCK_STATE_CHANGE_KEYS.clear();
         restoredServer = server;
     }
@@ -192,7 +197,17 @@ public final class DynamicMass {
             return;
         }
 
-        final Map<BlockMassKey, Double> savedMasses = DynamicMassSavedData.get(server).getMasses();
+        final DynamicMassSavedData savedData = DynamicMassSavedData.get(server);
+        if (savedData == null) {
+            return;
+        }
+
+        restoreSavedMasses(server, savedData);
+    }
+
+    private static synchronized void restoreSavedMasses(final MinecraftServer server,
+                                                        final DynamicMassSavedData savedData) {
+        final Map<BlockMassKey, Double> savedMasses = savedData.getMasses();
         BLOCK_MASSES.clear();
         PRESERVED_BLOCK_STATE_CHANGE_KEYS.clear();
         BLOCK_MASSES.putAll(savedMasses);
@@ -236,23 +251,36 @@ public final class DynamicMass {
     }
 
     private static void restoreSavedMasses(final Level level) {
-        if (!level.isClientSide()) {
-            final MinecraftServer server = level.getServer();
-            if (server != null && restoredServer != server) {
-                restoreSavedMasses(server);
-            }
+        if (level.isClientSide() || !(level instanceof final ServerLevel serverLevel)) {
+            return;
+        }
+
+        final MinecraftServer server = serverLevel.getServer();
+        if (restoredServer == server) {
+            return;
+        }
+
+        final DynamicMassSavedData savedData = DynamicMassSavedData.get(serverLevel);
+        if (savedData != null) {
+            restoreSavedMasses(server, savedData);
         }
     }
 
     private static void saveBlockMass(final Level level, final BlockMassKey key, final double mass) {
         if (level instanceof final ServerLevel serverLevel) {
-            DynamicMassSavedData.get(serverLevel.getServer()).setMass(key, mass);
+            final DynamicMassSavedData savedData = DynamicMassSavedData.get(serverLevel);
+            if (savedData != null) {
+                savedData.setMass(key, mass);
+            }
         }
     }
 
     private static void removeSavedBlockMass(final Level level, final BlockMassKey key) {
         if (level instanceof final ServerLevel serverLevel) {
-            DynamicMassSavedData.get(serverLevel.getServer()).removeMass(key);
+            final DynamicMassSavedData savedData = DynamicMassSavedData.get(serverLevel);
+            if (savedData != null) {
+                savedData.removeMass(key);
+            }
         }
     }
 

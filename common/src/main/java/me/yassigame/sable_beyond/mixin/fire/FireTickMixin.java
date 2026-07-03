@@ -2,6 +2,7 @@ package me.yassigame.sable_beyond.mixin.fire;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.yassigame.sable_beyond.config.SableBeyondConfig;
 import me.yassigame.sable_beyond.utils.SableSubLevelPosHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -45,6 +46,10 @@ public abstract class FireTickMixin {
             RandomSource random,
             CallbackInfo ci
     ) {
+        if (!SableBeyondConfig.common().fire.fire_extinguish) {
+            return;
+        }
+
         if (this.hasBlockingOverlapAcrossSubLevels(level, pos)) {
             level.removeBlock(pos, false);
         }
@@ -61,12 +66,12 @@ public abstract class FireTickMixin {
             return;
         }
 
-        if (this.hasBlockingOverlapAcrossSubLevels(actualLevel, pos)) {
+        if (this.hasBlockingOverlapAcrossSubLevels(actualLevel, pos) && SableBeyondConfig.common().fire.fire_extinguish) {
             cir.setReturnValue(false);
             return;
         }
 
-        if (this.isValidFireLocationAcrossSubLevels(actualLevel, pos)) {
+        if (this.isValidFireLocationAcrossSubLevels(actualLevel, pos) && SableBeyondConfig.common().fire.fire_spreading) {
             cir.setReturnValue(true);
         }
     }
@@ -84,6 +89,10 @@ public abstract class FireTickMixin {
             BlockPos pos,
             Operation<Boolean> original
     ) {
+        if (!SableBeyondConfig.common().fire.fire_spreading) {
+            return original.call(instance, level, pos);
+        }
+
         if (level instanceof Level actualLevel) {
             return this.isValidFireLocationAcrossSubLevels(actualLevel, pos);
         }
@@ -101,6 +110,10 @@ public abstract class FireTickMixin {
     private int sableBeyond$redirectGetIgniteOdds(
             FireBlock instance, LevelReader level, BlockPos pos, Operation<Integer> original
     ) {
+        if (!SableBeyondConfig.common().fire.fire_spreading) {
+            return original.call(instance, level, pos);
+        }
+
         if (level instanceof Level actualLevel) {
             final BlockPos resolvedPos = SableSubLevelPosHelper.findMatchingBlockPos(
                     actualLevel,

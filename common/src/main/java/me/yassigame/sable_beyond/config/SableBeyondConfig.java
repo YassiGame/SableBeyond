@@ -1,6 +1,5 @@
 package me.yassigame.sable_beyond.config;
 
-import me.yassigame.sable_beyond.api.mass.DynamicMass;
 import me.yassigame.sable_beyond.api.mass.EntityMass;
 
 import java.nio.file.Path;
@@ -8,6 +7,7 @@ import java.nio.file.Path;
 public final class SableBeyondConfig {
     private static DynamicMassConfig dynamicMass = DynamicMassConfig.defaults();
     private static EntityMassConfig entityMass = EntityMassConfig.defaults();
+    private static CommonConfig common = CommonConfig.defaults();
     private static OtherConfig other = OtherConfig.defaults();
 
     private SableBeyondConfig() {
@@ -16,6 +16,7 @@ public final class SableBeyondConfig {
     public static synchronized void load(final Path configDirectory) {
         dynamicMass = DynamicMassConfig.load(configDirectory);
         entityMass = EntityMassConfig.load(configDirectory);
+        common = CommonConfig.load(configDirectory);
         other = OtherConfig.load(configDirectory);
     }
 
@@ -27,6 +28,7 @@ public final class SableBeyondConfig {
     public static synchronized void save(final Path configDirectory) {
         dynamicMass.save(configDirectory);
         entityMass.save(configDirectory);
+        common.save(configDirectory);
         other.save(configDirectory);
     }
 
@@ -49,5 +51,9 @@ public final class SableBeyondConfig {
 
     public static OtherConfig other() {
         return other;
+    }
+
+    public static CommonConfig common() {
+        return common;
     }
 }

@@ -2,6 +2,7 @@ package me.yassigame.sable_beyond.neoforge.mixin.fire;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.yassigame.sable_beyond.config.SableBeyondConfig;
 import me.yassigame.sable_beyond.utils.SableSubLevelPosHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,6 +32,10 @@ public abstract class FireTickMixin {
     private void sableBeyond$redirectCheckBurnOut(
             FireBlock instance, Level level, BlockPos pos, int chance, RandomSource random, int age, Direction face, Operation<Void> original
     ) {
+        if (!SableBeyondConfig.common().fire.fire_spreading) {
+            return;
+        }
+
         final BlockPos resolvedPos = SableSubLevelPosHelper.findMatchingBlockPos(
                 level,
                 pos,

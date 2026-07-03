@@ -29,11 +29,7 @@ import java.util.WeakHashMap;
 
 public final class EncasedFanSubLevelAirflowHelper {
     private static final double[] SAMPLE_OFFSETS = {-0.3d, 0.0d, 0.3d};
-    private static final double TOUCHED_SUBLEVEL_FORCE_MULTIPLIER = 2.0d;
     private static final Map<ServerLevel, TickingFanCache> TICKING_FANS = new WeakHashMap<>();
-
-    private EncasedFanSubLevelAirflowHelper() {
-    }
 
     public static void registerTickingFan(final EncasedFanBlockEntity fan) {
         if (!SableBeyondNeoForgeConfig.applyForceToTouchedSublevels()) {
@@ -163,7 +159,7 @@ public final class EncasedFanSubLevelAirflowHelper {
             return;
         }
 
-        final double forceMagnitude = Math.abs(propeller.getScaledThrust()) * timeStep * TOUCHED_SUBLEVEL_FORCE_MULTIPLIER;
+        final double forceMagnitude = Math.abs(propeller.getScaledThrust()) * timeStep * SableBeyondNeoForgeConfig.current().compatibility.create.encased_fan.fan_force_multiplier;
         final double hitScale = 1.0d / touchedHits.size();
         for (final TouchedSubLevelHit touchedHit : touchedHits) {
             final Vec3 globalImpulse = flowVector.scale(forceMagnitude * touchedHit.inverseHitPercentage() * hitScale);
@@ -181,7 +177,7 @@ public final class EncasedFanSubLevelAirflowHelper {
                 globalStart,
                 globalEnd,
                 ClipContext.Block.OUTLINE,
-                ClipContext.Fluid.ANY,
+                ClipContext.Fluid.NONE,
                 CollisionContext.empty()
         );
         ((ClipContextExtension) mainContext).sable$setDoNotProject(true);
@@ -192,7 +188,6 @@ public final class EncasedFanSubLevelAirflowHelper {
                 : mainHit.getLocation().distanceToSqr(globalStart);
         FlowHit closestFlowHit = null;
 
-        // why this piece of shit of intelij idea tell me there is an error here... Edit: ahhh a warning for removal
         for (final SubLevel subLevel : Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(globalStart, globalEnd))) {
             if (!(subLevel instanceof final ServerSubLevel hitServerSubLevel) || subLevel == parentSubLevel) {
                 continue;

@@ -9,8 +9,10 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,8 +28,29 @@ public final class DynamicMassSavedData extends SavedData {
 
     private final ConcurrentMap<DynamicMass.BlockMassKey, Double> masses = new ConcurrentHashMap<>();
 
-    public static DynamicMassSavedData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(FACTORY, DATA_NAME);
+    public static @Nullable DynamicMassSavedData get(MinecraftServer server) {
+        if (server == null || server.overworld() == null) {
+            return null;
+        }
+
+        return getFromStorageLevel(server.overworld());
+    }
+
+    public static @Nullable DynamicMassSavedData get(ServerLevel level) {
+        if (level == null) {
+            return null;
+        }
+
+        final ServerLevel overworld = level.getServer().overworld();
+        if (overworld != null) {
+            return getFromStorageLevel(overworld);
+        }
+
+        return level.dimension().equals(Level.OVERWORLD) ? getFromStorageLevel(level) : null;
+    }
+
+    private static DynamicMassSavedData getFromStorageLevel(ServerLevel level) {
+        return level.getDataStorage().computeIfAbsent(FACTORY, DATA_NAME);
     }
 
     public void setMass(final DynamicMass.BlockMassKey key, final double mass) {

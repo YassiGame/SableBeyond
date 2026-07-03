@@ -9,9 +9,29 @@
   "config.sable_beyond.create.fluid_tank": "Fluid Tank",
   "config.sable_beyond.create.spout": "Spout",
   "config.sable_beyond.create.drain": "Drain",
+  "config.sable_beyond.create.water_wheel": "Water Wheel",
 
   "config.sable_beyond.welcome": "\uE002 Sable Beyond",
-  "config.sable_beyond.welcome.description": "\nWelcome to the Sable Beyond configuration page!\n\nHere you can find all available settings for the mod. I have tried to make the config page as clear and user-friendly as possible, and almost every feature can be configured to better match your preferences.\n\nFor your information the Dynamic Mass and Entity Mass are now disabled by default...\n\n⚠ This mod is still in alpha, so please make a backup of your world before using it. If you encounter a bug, experience unexpected behavior, or would like to suggest an improvement, the best place to do so is the GitHub Issues page.\n\nThank you for downloading my mod and supporting Sable Beyond!",
+  "config.sable_beyond.welcome.description": "\nWelcome to the Sable Beyond configuration page!\n\nHere you can find all available settings for the mod. I have tried to make the config page as clear and user-friendly as possible, and almost every feature can be configured to better match your preferences.\n\nFor your information some features are disabled by default...\n\n⚠ This mod is still in alpha, so please make a backup of your world before using it. If you encounter a bug, experience unexpected behavior, or would like to suggest an improvement, the best place to do so is the GitHub Issues page.\n\nThank you for downloading my mod and supporting Sable Beyond!",
+
+  "config.sable_beyond.common": "Common",
+
+  "config.sable_beyond.common.fire": "Fire Config",
+  "config.sable_beyond.common.fire.extinguish": "Fire extinguish",
+  "config.sable_beyond.common.fire.extinguish.tooltip": "Extinguish fire when the fire in the sublevel is in water or colliding with a block",
+  "config.sable_beyond.common.fire.spreading": "Subelevel fire spreading",
+  "config.sable_beyond.common.fire.spreading.tooltip": "Fire spread btw sublevels and real world",
+  "config.sable_beyond.common.fire.lava": "Lava Fire",
+  "config.sable_beyond.common.fire.lava.tooltip": "Lava causes fire to flammable blocks in sublevels",
+
+  "config.sable_beyond.common.flowing_fluid": "Flowing Fluid Config",
+  "config.sable_beyond.common.flowing_fluid.enabled.tooltip": "Toggle flowing fluids to push sublevels",
+  "config.sable_beyond.common.flowing_fluid.force": "Flowing Fluid Force",
+  "config.sable_beyond.common.flowing_fluid.force.tooltip": "Force to apply to sublevel when in a flowing fluid",
+  "config.sable_beyond.common.flowing_fluid.lava_force_multiplier": "Flowing Lava force multiplier",
+  "config.sable_beyond.common.flowing_fluid.lava_force_multiplier.tooltip": "Force multiplier for the flowing lava",
+  "config.sable_beyond.common.flowing_fluid.max_force": "Flowing Fluid Max Force",
+  "config.sable_beyond.common.flowing_fluid.max_force.tooltip": "Max flowing fluid force to apply to sublevel",
 
   "config.sable_beyond.other": "Other",
   "config.sable_beyond.other.main_menu": "Sable Beyond config button in Main Menu",
@@ -25,19 +45,34 @@
   "config.sable_beyond.compatibility.create.basin.upside_down.empty_input_inventory.tooltip": "Toggles whether the Basin's input inventory is emptied when upside down",
   "config.sable_beyond.compatibility.create.basin.upside_down.empty_output_inventory": "Empty output inventory",
   "config.sable_beyond.compatibility.create.basin.upside_down.empty_output_inventory.tooltip": "Toggles whether the Basin's output inventory is emptied when upside down",
+  "config.sable_beyond.compatibility.create.basin.upside_down.fluid_escaping": "Fluid Escaping",
+  "config.sable_beyond.compatibility.create.basin.upside_down.fluid_escaping.tooltip": "Fluid try escaping from the basin when upside down",
+  "config.sable_beyond.compatibility.create.basin.basin_fill_from_world_fluid": "Basin Fluid Intake",
+  "config.sable_beyond.compatibility.create.basin.basin_fill_from_world_fluid.tooltip": "Allows an upward-facing basin to absorb a fluid source block directly above it when a tank has enough space",
 
-  "config.sable_beyond.compatibility.create.mechanical_arm.ignore_placement_range_for_sublevel_targets": "Ignore Mechanical Arm placement range when sub-levels are involved",
-  "config.sable_beyond.compatibility.create.mechanical_arm.ignore_placement_range_for_sublevel_targets.description": "If enabled, configuring a Mechanical Arm will keep selected interaction points even when they are outside the normal range, as long as the arm or one of those targets is inside a Sable sub-level. This only affects configuration and does not increase the arm's working range.",
+  "config.sable_beyond.compatibility.create.mechanical_arm.ignore_placement_range_for_sublevel_targets": "Ignore Mechanical Arm placement range when sublevels are involved",
+  "config.sable_beyond.compatibility.create.mechanical_arm.ignore_placement_range_for_sublevel_targets.description": "If enabled, configuring a Mechanical Arm will keep selected interaction points even when they are outside the normal range, as long as the arm or one of those targets is inside a Sable sublevel. This only affects configuration and does not increase the arm's working range.",
 
-  "config.sable_beyond.compatibility.create.encased_fan_airflow.apply_force_to_touched_sublevels": "Apply Encased Fan airflow force to touched sub-levels",
-  "config.sable_beyond.compatibility.create.encased_fan_airflow.apply_force_to_touched_sublevels.description": "If enabled, Create Encased Fan airflow will apply force to any Sable sub-level that is physically touched by the airflow. This affects server-side physics behaviour.",
+  "config.sable_beyond.compatibility.create.encased_fan.airflow.apply_force_to_touched_sublevels": "Apply Encased Fan airflow force to touched sublevels",
+  "config.sable_beyond.compatibility.create.encased_fan.airflow.apply_force_to_touched_sublevels.description": "If enabled, Create Encased Fan airflow will apply force to any Sable sublevel that is physically touched by the airflow.",
+  "config.sable_beyond.compatibility.create.encased_fan.airflow.force_multiplier": "Airflow force multiplier",
+  "config.sable_beyond.compatibility.create.encased_fan.airflow.force_multiplier.tooltip": "How much force the airflow does to sublevels",
+
+  "config.sable_beyond.compatibility.create.water_wheel.description": "Powered Water Wheels can propel their sublevel while touching water.",
+  "config.sable_beyond.compatibility.create.water_wheel.enabled.tooltip": "Allows powered Water Wheels touching water to generate propulsion force",
+  "config.sable_beyond.compatibility.create.water_wheel.realistic_thrust_mode": "Realistic thrust mode",
+  "config.sable_beyond.compatibility.create.water_wheel.realistic_thrust_mode.tooltip": "When enabled, applies tangential force at every water contact. When disabled, applies one straight force along the wheel axle at the average contact point",
+  "config.sable_beyond.compatibility.create.water_wheel.thrust_per_rpm": "Thrust force per rpm",
+  "config.sable_beyond.compatibility.create.water_wheel.thrust_per_rpm.tooltip": "Amount of propulsion force generated per RPM while the Water Wheel is powered and touching water",
+  "config.sable_beyond.compatibility.create.water_wheel.small_wheel_factor": "Small Water Wheel force factor",
+  "config.sable_beyond.compatibility.create.water_wheel.small_wheel_factor.tooltip": "Multiplier applied to the propulsion force generated by Small Water Wheels",
 
   "config.sable_beyond.dynamic_mass": "\uE000 Dynamic Mass",
   "config.sable_beyond.dynamic_mass.description": "The Dynamic Mass system allows to change a block's mass in real time.\n\n\uE000 Please note that this feature is still in the testing phase, so expect some bugs.",
   "config.sable_beyond.dynamic_mass.enabled.tooltip": "Global toggle for dynamic block mass overrides.",
   "config.sable_beyond.dynamic_mass.mass_of_bucket": "Mass of 1 bucket of liquid",
   "config.sable_beyond.dynamic_mass.mass_of_bucket.tooltip": "Mass of 1 bucket of any liquid in kpg",
-  "config.sable_beyond.dynamic_mass.fabric": "Sorry Fabric Users that's all, if any idea where to add a liquid dynamic mass or other, please open a Feature issue with ur idea.",
+  "config.sable_beyond.dynamic_mass.fabric": "Sorry Fabric Users that's all, if any idea where to add dynamic mass, please open a Feature issue with ur idea.",
   "config.sable_beyond.dynamic_mass.create": "Create Dynamic Fluid Mass",
   "config.sable_beyond.dynamic_mass.create.generic_tooltip": "Toggles Dynamic Fluid Mass to create %s block",
 
@@ -50,8 +85,8 @@
 
   "config.sable_beyond.entity_mass.experimental_player_mass": "Experimental player mass",
   "config.sable_beyond.entity_mass.experimental_player_mass.tooltip": "Applies the mass system to players. This can be unstable with Sable physics.",
-  "config.sable_beyond.entity_mass.experimental_player_sublevel_interaction": "Experimental player sub-level interaction",
-  "config.sable_beyond.entity_mass.experimental_player_sublevel_interaction.tooltip": "Lets players interact physically with sub-levels. Cool, but still experimental.",
+  "config.sable_beyond.entity_mass.experimental_player_sublevel_interaction": "Experimental player sublevel interaction",
+  "config.sable_beyond.entity_mass.experimental_player_sublevel_interaction.tooltip": "Lets players interact physically with sublevels. Cool, but still experimental.",
 
   "config.sable_beyond.entity_mass.living_entity.only_player": "Only for Players",
   "config.sable_beyond.entity_mass.living_entity.only_player.tooltip": "Only applies mass to player entities",
@@ -90,6 +125,6 @@
   "config.sable_beyond.mass_override.error.mass_range": "Mass must be finite and non-negative.",
   "config.sable_beyond.mass_override.error.mass_number": "Mass must be a number.",
 
-  "sable_beyond.create.mechanical_arm.points_removed_distant_sublevel_and_range": "%1$s selected interaction point(s) removed because they are out of range or on a sub-level too far away to be reached by the arm.",
-  "sable_beyond.create.mechanical_arm.points_removed_distant_sublevel": "%1$s selected interaction point(s) removed because their sub-level is too far away to be reached by the arm."
+  "sable_beyond.create.mechanical_arm.points_removed_distant_sublevel_and_range": "%1$s selected interaction point(s) removed because they are out of range or on a sublevel too far away to be reached by the arm.",
+  "sable_beyond.create.mechanical_arm.points_removed_distant_sublevel": "%1$s selected interaction point(s) removed because their sublevel is too far away to be reached by the arm."
 }

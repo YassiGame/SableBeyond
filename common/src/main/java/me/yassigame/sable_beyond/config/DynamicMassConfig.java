@@ -1,11 +1,8 @@
 package me.yassigame.sable_beyond.config;
 
 import me.yassigame.sable_beyond.SableBeyond;
-import me.yassigame.sable_beyond.api.mass.EntityMass;
 
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public final class DynamicMassConfig {
     public static final String FILE_NAME = "dynamic-mass.json";

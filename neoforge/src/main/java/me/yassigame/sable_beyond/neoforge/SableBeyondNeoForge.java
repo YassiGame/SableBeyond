@@ -7,8 +7,10 @@ import me.yassigame.sable_beyond.api.mass.DynamicMass;
 import me.yassigame.sable_beyond.command.SableBeyondCommand;
 import me.yassigame.sable_beyond.event.EntityMassOnSublevelListener;
 import me.yassigame.sable_beyond.event.EntityOnSublevelGroundEventDispatcher;
+import me.yassigame.sable_beyond.event.FlowingFluidSubLevelForceHandler;
 import me.yassigame.sable_beyond.neoforge.config.SableBeyondConfigLoader;
 import me.yassigame.sable_beyond.neoforge.mixinhelper.compatibility.create.fan_airflow.EncasedFanSubLevelAirflowHelper;
+import me.yassigame.sable_beyond.platform.ModPlatform;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -27,8 +29,11 @@ public final class SableBeyondNeoForge {
         }
 
         SableBeyondConfigLoader.load();
-        SableEventPlatform.INSTANCE.onPhysicsTick(EncasedFanSubLevelAirflowHelper::applyRegisteredFansForPhysicsTick);
+        if (ModPlatform.isModLoaded("create")) {
+            SableEventPlatform.INSTANCE.onPhysicsTick(EncasedFanSubLevelAirflowHelper::applyRegisteredFansForPhysicsTick);
+        }
         SableEventPlatform.INSTANCE.onPhysicsTick(EntityOnSublevelGroundEventDispatcher::onPhysicsTick);
+        SableEventPlatform.INSTANCE.onPhysicsTick(FlowingFluidSubLevelForceHandler::onPhysicsTick);
         SableBeyondEvents.registerEntityOnSublevelGround(EntityMassOnSublevelListener::onEntityMassOnSublevel);
         NeoForge.EVENT_BUS.addListener(SableBeyondConfigLoader::reloadOnServerStarting);
         NeoForge.EVENT_BUS.addListener(this::clearDynamicMassOnServerStarting);

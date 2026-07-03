@@ -54,3 +54,15 @@ Example:
 ## [0.4.2] - Hot Fix Sable v2.0.1 entity mass crash
 - (Common) Some FireMixin clean up
 - (Common) Fixed a crash of EntityMass with Sable v2.0.1
+
+## [0.5.0] - Water Update
+- (Common) Flowing Fluid apply forces to sublevels
+- (Common) Added config for the fire update and for flowing fluid
+- (Common) Added additional null checks to prevent potential crashes if a level is unexpectedly unavailable after the server starts
+- (NeoForge) Removed the temporary Mechanical Hand fix, as it is now included in the base Sable mod.
+- (NeoForge) Removed the old fix for the sprinkler of the addon slice and dice
+- (NeoForge) Now create is an optional dependency
+- (NeoForge) Added an option to configure the Encased Fan airflow force multiplier
+- (NeoForge) Added a Basin Fluid Escaping mechanic for upside-down Basins in sublevels. Escaping fluid can also be transferred into other fluid containers
+- (NeoForge) Added Basin Fluid Intake, allowing upward-facing Basins to absorb fluid source blocks above them
+- ~~(NeoForge) Added the annoying dog~~

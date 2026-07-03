@@ -1,7 +1,7 @@
 import me.modmuss50.mpp.ReleaseType
 
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'com.gradleup.shadow'
 }
 
 def jadeEnabled = providers.gradleProperty("jade_enabled").map { it.toBoolean() }.getOrElse(true)
@@ -106,7 +106,8 @@ publishMods {
         projectId = providers.gradleProperty("modrinth_project_id")
         minecraftVersions.add(minecraft_version)
 
-        requires("sable", "create")
+        requires("sable")
+        optional("create")
         embeds("cloth-config")
     }
 
@@ -119,7 +120,8 @@ publishMods {
         clientRequired = true
         serverRequired = true
 
-        requires("sable", "create")
+        requires("sable")
+        optional("create")
         embeds("cloth-config")
     }
 }

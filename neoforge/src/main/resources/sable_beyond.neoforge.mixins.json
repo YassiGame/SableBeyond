@@ -9,7 +9,8 @@
   },
   "client": [
     "compatibility.create.mechanical_arm.ArmInteractionSubLevelPointAnimation",
-    "compatibility.create.mechanical_arm.MechanicalArmSublevelFailure"
+    "compatibility.create.mechanical_arm.MechanicalArmSublevelFailure",
+    "compatibility.create.basin.BasinRenderDispatcherFluidEscaping"
   ],
   "mixins": [
     "fire.FireTickMixin",
@@ -20,7 +21,8 @@
     "compatibility.create.fluid_tank.FluidTankDynamicMass",
     "compatibility.create.spout.SpoutDynamicMass",
     "compatibility.create.drain.DrainDynamicMass",
-    "compatibility.create.basin.BasinTankDynamicMass"
+    "compatibility.create.basin.BasinTankDynamicMass",
+    "compatibility.create.water_wheel.WaterWheelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

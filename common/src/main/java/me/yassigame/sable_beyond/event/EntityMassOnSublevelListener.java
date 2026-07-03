@@ -12,6 +12,7 @@ import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import me.yassigame.sable_beyond.api.event.EntityOnSublevelGroundEvent;
 import me.yassigame.sable_beyond.api.mass.EntityMass;
 import me.yassigame.sable_beyond.platform.ModPlatform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -65,6 +66,11 @@ public final class EntityMassOnSublevelListener {
         final Vector3d rawLocalPoint = subLevel.logicalPose().transformPositionInverse(new Vector3d(globalPoint));
         final Vector3d supportPoint = getSupportPoint(subLevel, entity, rawLocalPoint);
         final Vector3d globalGravity = DimensionPhysicsData.getGravity(subLevel.getLevel(), globalPoint, new Vector3d());
+
+        // if fluid dont apply force
+        if (!subLevel.getLevel().getFluidState(BlockPos.containing(rawLocalPoint.x, rawLocalPoint.y, rawLocalPoint.z)).isEmpty()) {
+            return;
+        }
 
         // Convert the world gravity vector into the sublevel's local frame so the load follows the sublevel orientation.
         final Vector3d localImpulse = subLevel.logicalPose()
