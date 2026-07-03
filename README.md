@@ -31,12 +31,20 @@ Sable Beyond expands the Sable mod with additional features, quality-of-life imp
 
 | Version | Feature | NeoForge | Fabric |
 |:---:|---|:---:|:---:|
-| 0.0.1 | Mechanical arm compatibility with Sable sublevels | ✅ | ❌ |
-| 0.0.1 | Create fans can push / pull sublevels | ✅ | ❌ |
-| 0.0.1 | Entity mass system, configurable with formulas, etc. *(disabled by default)* | ✅ | ✅ |
-| 0.0.2 | Basin in sublevels placed upside down drops their items *(disabled by default)* | ✅ | ❌ |
-| 0.0.2 | Dynamic mass system, real-time mass changing *(disabled by default)* | ✅ | ✅ |
-| 0.4.0 | Better fire spreading and fire goes out when the sublevel is in water or in a solid block | ✅ | ✅ |
+| 0.0.1 | Mechanical Arms can interact with Sable sublevels | ✅ | ❌ |
+| 0.0.1 | Create Encased Fans can push and pull sublevels | ✅ | ❌ |
+| 0.0.1 | Configurable entity mass system with formula support *(disabled by default)* | ✅ | ✅ |
+| 0.0.2 | In-game configuration screen using Cloth Config | ✅ | ✅ |
+| 0.0.2 | Dynamic mass system with real-time mass changes *(disabled by default)* | ✅ | ✅ |
+| 0.0.2 | Dynamic mass support for Create Fluid Tanks, Spouts, Drains and Basins | ✅ | ❌ |
+| 0.0.2 | Upside-down Basins in sublevels drop their items *(disabled by default)* | ✅ | ❌ |
+| 0.0.2 | KubeJS integration (WIP) | ✅ | ❌ |
+| 0.4.0 | Improved fire spreading between sublevels and the real world | ✅ | ✅ |
+| 0.4.0 | Fire is extinguished when a sublevel enters water or a solid block | ✅ | ✅ |
+| 0.5.0 | Flowing fluids apply configurable forces to sublevels | ✅ | ✅ |
+| 0.5.0 | Fluid escapes from upside-down Basins and can enter fluid containers *(disabled by default)* | ✅ | ❌ |
+| 0.5.0 | Upward-facing Basins absorb fluid source blocks above them *(disabled by default)* | ✅ | ❌ |
+| 0.5.0 | Powered Water Wheels generate configurable propulsion while touching water | ✅ | ❌ |
 
 ___
 ## Entity Mass *(disabled by default)*
